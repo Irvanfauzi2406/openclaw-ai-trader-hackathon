@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.*
+.openclaw/
+memory/
+AGENTS.md
+SOUL.md
+USER.md
+BOOTSTRAP.md
+HEARTBEAT.md
+TOOLS.md
+IDENTITY.md
