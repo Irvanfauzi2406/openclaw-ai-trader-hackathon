@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:07,000
+Ini adalah ClawTrade, command center trading berbasis AI
+untuk monitoring market dan eksekusi yang lebih terkontrol.
+
+2
+00:00:07,000 --> 00:00:15,000
+Di satu tampilan, pengguna bisa melihat pergerakan market secara live,
+chart, dan status risiko secara real-time.
+
+3
+00:00:15,000 --> 00:00:25,000
+AI kemudian menganalisis struktur market,
+lalu memberikan bias trading, entry plan,
+take profit, dan reasoning yang mudah dipahami.
+
+4
+00:00:25,000 --> 00:00:34,000
+Pengguna juga bisa memilih mode kerja,
+mulai dari advisory, semi-auto, sampai auto execute.
+
+5
+00:00:34,000 --> 00:00:43,000
+Setelah trade tervalidasi,
+alurnya diteruskan ke pipeline eksekusi berbasis OpenClaw.
+
+6
+00:00:43,000 --> 00:00:54,000
+Jadi, ClawTrade bukan hanya memberi insight,
+tapi membantu membawa analisis
+menjadi workflow operasional yang nyata.

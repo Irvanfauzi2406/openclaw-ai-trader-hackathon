@@ -1,0 +1,11 @@
+ClawTrade adalah command center trading berbasis AI untuk pengambilan keputusan secara real-time.
+
+Dalam satu interface, pengguna bisa memantau market secara live, melihat analisis AI, dan mengelola eksekusi dengan kontrol risiko yang tetap terjaga.
+
+Sistem ini membaca pergerakan harga, volatilitas, dan struktur market, lalu menghasilkan rekomendasi trading yang lebih terarah, lengkap dengan entry plan, take profit, dan ringkasan reasoning.
+
+Operator juga bisa memilih mode kerja, mulai dari advisory, semi-auto, hingga auto execute, sesuai tingkat kontrol yang diinginkan.
+
+Setelah trade tervalidasi, alurnya diteruskan melalui pipeline eksekusi berbasis OpenClaw, sehingga AI tidak hanya memberi insight, tapi juga masuk ke workflow operasional yang nyata.
+
+Dengan ClawTrade, proses dari analisis market ke eksekusi bisa menjadi lebih cepat, lebih terstruktur, dan lebih siap digunakan dalam skenario trading modern.

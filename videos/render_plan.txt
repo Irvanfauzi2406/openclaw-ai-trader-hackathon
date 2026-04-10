@@ -1,0 +1,13 @@
+Target final render:
+- Input video: OpenClaw AI Trader - Google Chrome 2026-04-10 09-34-27.mp4
+- Output target: hackathon_demo_final.mp4
+- Audio: voiceover_id.mp3
+- Subtitle source: hackathon_demo_id.srt
+- Approx final duration: 75 seconds
+
+Planned cuts:
+1) 0:00-0:10 opening dashboard
+2) 0:10-0:28 AI console and chart
+3) 0:28-0:55 execution workflow and reasoning
+4) 0:55-1:05 multi-asset switch
+5) 1:05-1:15 closing shot
