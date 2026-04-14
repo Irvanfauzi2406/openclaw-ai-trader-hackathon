@@ -22,6 +22,7 @@ import { watchlist, positions } from './data'
 import { analyzeTrade } from './lib/api'
 import { useMarketData } from './hooks/useMarketData'
 import { useOrders } from './hooks/useOrders'
+import { useSystemHealth } from './hooks/useSystemHealth'
 
 const marketOptions = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'AVAXUSDT']
 const formatPair = (symbol) => `${symbol.slice(0, -4)}/USDT`
@@ -32,9 +33,9 @@ const currency = new Intl.NumberFormat('en-US', {
 })
 
 function getMarketSourceLabel(source) {
-  if (source === 'binance-stream') return 'Binance Realtime'
-  if (source === 'binance') return 'Binance Live API'
-  if (source === 'binance-cached') return 'Binance Cached Snapshot'
+  if (source === 'hyperliquid-stream') return 'Hyperliquid Realtime'
+  if (source === 'hyperliquid') return 'Hyperliquid Live Snapshot'
+  if (source === 'hyperliquid-cached') return 'Hyperliquid Cached Snapshot'
   if (source === 'coingecko') return 'CoinGecko Live Fallback'
   if (source === 'coingecko-cached') return 'CoinGecko Cached Snapshot'
   return 'Demo Fallback Feed'
@@ -48,6 +49,7 @@ export default function App() {
   const [analysisError, setAnalysisError] = useState('')
   const { market, loading, streaming } = useMarketData(symbol)
   const { orders } = useOrders()
+  const { health } = useSystemHealth()
 
   async function runAnalysis() {
     if (!market) return
@@ -90,15 +92,15 @@ export default function App() {
     return [
       {
         title: 'Market feed connected',
-        description: market?.source === 'binance' || market?.source === 'binance-stream'
-          ? 'Live market data is flowing from Binance with continuous refresh for trading decisions.'
+        description: market?.source === 'hyperliquid' || market?.source === 'hyperliquid-stream'
+          ? 'Live market data is flowing from Hyperliquid with continuous candle and asset-context refresh.'
           : market?.source === 'coingecko'
-            ? 'Live market snapshots are served from CoinGecko because Binance is unreachable from this network.'
+            ? 'Live market snapshots are served from CoinGecko because the primary provider is unreachable.'
             : market?.source?.includes('cached')
               ? 'The dashboard is showing the latest real market snapshot while the provider reconnects.'
               : 'Demo candles are active because remote market feeds are currently unavailable.',
         status: 'done',
-        statusLabel: market?.source?.includes('cached') ? 'Stabilized' : market?.source === 'coingecko' ? 'Live Fallback' : market?.source?.includes('binance') ? 'Live' : 'Demo',
+        statusLabel: market?.source?.includes('cached') ? 'Stabilized' : market?.source === 'coingecko' ? 'Live Fallback' : market?.source?.includes('hyperliquid') ? 'Live' : 'Demo',
       },
       {
         title: 'AI analyzes market structure',
@@ -165,7 +167,7 @@ export default function App() {
         <div className="topbar-actions">
           <div className="pill success-pill">
             <ShieldCheck size={16} />
-            Hackathon-ready UI
+            {health?.marketProvider ? `Provider: ${health.marketProvider}` : 'Operator terminal'}
           </div>
           <button className="primary-btn hero-live-btn">
             <Bot size={18} />
@@ -246,9 +248,9 @@ export default function App() {
                 </select>
                 <div className="pill dark-pill">
                   <Activity size={15} />
-                  {market?.source === 'binance-stream'
+                  {market?.source === 'hyperliquid-stream'
                     ? 'Streaming live'
-                    : market?.source === 'binance'
+                    : market?.source === 'hyperliquid'
                       ? 'Live API'
                       : market?.source === 'coingecko'
                         ? 'Live fallback'
@@ -258,10 +260,10 @@ export default function App() {
                 </div>
                 <div className="pill dark-pill">
                   <RefreshCw size={15} />
-                  {market?.source === 'binance-stream'
+                  {market?.source === 'hyperliquid-stream'
                     ? 'Realtime ticks'
                     : streaming
-                      ? 'Auto refresh • 15s'
+                      ? 'Auto refresh • 10s'
                       : 'Initial load'}
                 </div>
               </div>
@@ -283,6 +285,10 @@ export default function App() {
               <div className="chart-stat-box">
                 <span>Execution Mode</span>
                 <strong>{mode}</strong>
+              </div>
+              <div className="chart-stat-box">
+                <span>System Health</span>
+                <strong>{health?.ok ? 'Backend online' : 'Health check pending'}</strong>
               </div>
             </div>
 
@@ -333,10 +339,10 @@ export default function App() {
                     <span className="section-kicker">Open Positions</span>
                     <h3>Portfolio overview</h3>
                   </div>
-                  <div className="pill dark-pill subtle-pill">3 active positions</div>
+                  <div className="pill dark-pill subtle-pill">{positions.length} active positions</div>
                 </div>
                 <div className="position-list">
-                  {positions.map((item) => (
+                  {positions.length ? positions.map((item) => (
                     <div className="position-row" key={item.symbol}>
                       <div>
                         <strong>{item.symbol}</strong>
@@ -351,7 +357,7 @@ export default function App() {
                         <span>{item.leverage}</span>
                       </div>
                     </div>
-                  ))}
+                  )) : <div className="inline-note">Belum ada posisi real yang terhubung. Saat ini panel siap untuk integrasi paper trading atau broker/exchange adapter.</div>}
                 </div>
               </div>
 

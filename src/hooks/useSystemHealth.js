@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { fetchOrders } from '../lib/api'
+import { fetchHealth } from '../lib/api'
 
-export function useOrders() {
-  const [orders, setOrders] = useState([])
+export function useSystemHealth() {
+  const [health, setHealth] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -10,23 +10,24 @@ export function useOrders() {
 
     async function load() {
       try {
-        const data = await fetchOrders()
+        const data = await fetchHealth()
         if (!active) return
-        setOrders(data.orders || [])
+        setHealth(data)
       } catch {
         if (!active) return
+        setHealth(null)
       } finally {
         if (active) setLoading(false)
       }
     }
 
     load()
-    const interval = setInterval(load, 4000)
+    const interval = setInterval(load, 10000)
     return () => {
       active = false
       clearInterval(interval)
     }
   }, [])
 
-  return { orders, loading }
+  return { health, loading }
 }

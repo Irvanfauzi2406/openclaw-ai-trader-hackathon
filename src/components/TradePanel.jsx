@@ -93,12 +93,12 @@ export function TradePanel({ symbol, pairLabel, mode, market, analysis, onExecut
               <Zap size={14} /> {analysis?.summary || 'The AI engine will summarize the live setup here.'}
             </div>
             <div className="insight-pill muted glow-blue">
-              <Shield size={14} /> OpenClaw can forward validated order plans to your execution workflow.
+              <Shield size={14} /> OpenClaw currently forwards validated order plans into an execution workflow stub. Connect paper trading or a real broker adapter before using this for live capital.
             </div>
           </div>
 
           <div className="cta-row">
-            <button className="primary-btn full lift-btn" onClick={() => setOpenConfirm(true)} disabled={loading}>
+            <button className="primary-btn full lift-btn" onClick={() => setOpenConfirm(true)} disabled={loading || !market}>
               {loading ? <LoaderCircle size={16} className="spin" /> : null}
               Execute via OpenClaw
             </button>

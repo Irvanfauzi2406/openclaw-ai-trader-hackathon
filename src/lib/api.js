@@ -48,4 +48,10 @@ export async function fetchOrders() {
   return response.json()
 }
 
+export async function fetchHealth() {
+  const response = await fetch(`${API_BASE}/api/health`)
+  if (!response.ok) throw new Error('Failed to fetch health')
+  return response.json()
+}
+
 export { API_BASE }

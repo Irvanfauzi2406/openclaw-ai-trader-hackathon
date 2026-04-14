@@ -1,29 +1,4 @@
-export const positions = [
-  {
-    symbol: 'BTC/USDT',
-    side: 'LONG',
-    size: '0.42 BTC',
-    entry: 'Entry 66,940',
-    pnl: '+$842.18',
-    leverage: '3x isolated',
-  },
-  {
-    symbol: 'ETH/USDT',
-    side: 'LONG',
-    size: '4.8 ETH',
-    entry: 'Entry 3,406',
-    pnl: '+$261.37',
-    leverage: '2x isolated',
-  },
-  {
-    symbol: 'SOL/USDT',
-    side: 'SHORT',
-    size: '210 SOL',
-    entry: 'Entry 186.2',
-    pnl: '-$74.12',
-    leverage: '2x hedge',
-  },
-]
+export const positions = []
 
 export const watchlist = [
   { symbol: 'BTC/USDT', change: '+2.84%', note: 'Breakout continuation' },
