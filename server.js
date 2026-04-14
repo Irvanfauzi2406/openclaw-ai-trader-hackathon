@@ -3,7 +3,12 @@ import express from 'express'
 import cors from 'cors'
 import WebSocket from 'ws'
 import { randomUUID } from 'node:crypto'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 const app = express()
 const PORT = process.env.PORT || 8787
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
@@ -15,6 +20,10 @@ const OPENCLAW_EXECUTION_SESSION = process.env.OPENCLAW_EXECUTION_SESSION || 'ma
 const MARKET_PROVIDER = process.env.MARKET_PROVIDER || 'hyperliquid'
 const HYPERLIQUID_INFO_URL = process.env.HYPERLIQUID_INFO_URL || 'https://api.hyperliquid.xyz/info'
 const HYPERLIQUID_WS_URL = process.env.HYPERLIQUID_WS_URL || 'wss://api.hyperliquid.xyz/ws'
+const PAPER_LEDGER_DIR = path.join(__dirname, 'data')
+const PAPER_LEDGER_FILE = path.join(PAPER_LEDGER_DIR, 'paper-ledger.json')
+const PAPER_ACCOUNT_STARTING_EQUITY = Number(process.env.PAPER_ACCOUNT_STARTING_EQUITY || 100000)
+const PAPER_DEFAULT_NOTIONAL = Number(process.env.PAPER_DEFAULT_NOTIONAL || 2500)
 
 app.use(cors())
 app.use(express.json())
@@ -36,7 +45,58 @@ const marketSymbols = {
 const marketCache = new Map()
 const lastGoodMarketCache = new Map()
 const streamClients = new Map()
-const orders = new Map()
+
+function ensureLedgerFile() {
+  if (!existsSync(PAPER_LEDGER_DIR)) {
+    mkdirSync(PAPER_LEDGER_DIR, { recursive: true })
+  }
+
+  if (!existsSync(PAPER_LEDGER_FILE)) {
+    const initial = {
+      account: {
+        startingEquity: PAPER_ACCOUNT_STARTING_EQUITY,
+        updatedAt: new Date().toISOString(),
+      },
+      orders: [],
+      positions: [],
+      fills: [],
+    }
+    writeFileSync(PAPER_LEDGER_FILE, JSON.stringify(initial, null, 2))
+  }
+}
+
+function loadLedger() {
+  ensureLedgerFile()
+  try {
+    const parsed = JSON.parse(readFileSync(PAPER_LEDGER_FILE, 'utf8'))
+    return {
+      account: {
+        startingEquity: Number(parsed?.account?.startingEquity || PAPER_ACCOUNT_STARTING_EQUITY),
+        updatedAt: parsed?.account?.updatedAt || new Date().toISOString(),
+      },
+      orders: Array.isArray(parsed?.orders) ? parsed.orders : [],
+      positions: Array.isArray(parsed?.positions) ? parsed.positions : [],
+      fills: Array.isArray(parsed?.fills) ? parsed.fills : [],
+    }
+  } catch {
+    return {
+      account: {
+        startingEquity: PAPER_ACCOUNT_STARTING_EQUITY,
+        updatedAt: new Date().toISOString(),
+      },
+      orders: [],
+      positions: [],
+      fills: [],
+    }
+  }
+}
+
+let ledger = loadLedger()
+
+function persistLedger() {
+  ledger.account.updatedAt = new Date().toISOString()
+  writeFileSync(PAPER_LEDGER_FILE, JSON.stringify(ledger, null, 2))
+}
 
 function buildCandles(symbol = 'BTCUSDT', limit = 120) {
   const seed = symbolAnchors[symbol] || 100
@@ -259,6 +319,164 @@ async function fetchMarketSnapshot(symbol = 'BTCUSDT') {
   }
 }
 
+function normalizeSide(side = 'OPEN_LONG') {
+  const upper = String(side).toUpperCase()
+  if (upper.includes('SHORT')) return 'SHORT'
+  return 'LONG'
+}
+
+function getPositionDirection(side) {
+  return normalizeSide(side) === 'SHORT' ? -1 : 1
+}
+
+function roundCurrency(value) {
+  return Number(Number(value || 0).toFixed(2))
+}
+
+function roundQty(value) {
+  return Number(Number(value || 0).toFixed(6))
+}
+
+function deriveOrderNotional(order) {
+  const hinted = Number(order?.plan?.notional || order?.notional || 0)
+  if (hinted > 0) return hinted
+  return PAPER_DEFAULT_NOTIONAL
+}
+
+function deriveOrderPrice(order, marketPrice) {
+  const planPrice = Number(order?.plan?.price || order?.price || 0)
+  if (planPrice > 0) return planPrice
+  return Number(marketPrice || symbolAnchors[order?.symbol] || 1)
+}
+
+function deriveOrderQuantity(order, fillPrice) {
+  const explicitQty = Number(order?.plan?.quantity || order?.quantity || 0)
+  if (explicitQty > 0) return explicitQty
+  const notional = deriveOrderNotional(order)
+  return Math.max(notional / Math.max(fillPrice, 0.000001), 0)
+}
+
+function findOpenPosition(symbol, side) {
+  return ledger.positions.find((item) => item.symbol === symbol && item.side === side && item.status === 'OPEN')
+}
+
+function createPaperOrder(input, marketPrice) {
+  const createdAt = new Date().toISOString()
+  const fillPrice = deriveOrderPrice(input, marketPrice)
+  const quantity = roundQty(deriveOrderQuantity(input, fillPrice))
+  const notional = roundCurrency(quantity * fillPrice)
+  const paperSide = normalizeSide(input.side)
+
+  return {
+    id: randomUUID(),
+    symbol: String(input.symbol || 'BTCUSDT').toUpperCase(),
+    side: paperSide,
+    requestedSide: input.side,
+    mode: input.mode || 'Auto Execute',
+    plan: input.plan || {},
+    lifecycle: 'PAPER_FILLED',
+    status: 'filled',
+    provider: 'paper-trading',
+    transport: 'local-ledger',
+    createdAt,
+    updatedAt: createdAt,
+    submittedAt: createdAt,
+    acceptedAt: createdAt,
+    filledAt: createdAt,
+    fillPrice: roundCurrency(fillPrice),
+    quantity,
+    notional,
+    metadata: {
+      openclawDispatchAttempted: false,
+      openclawDispatchStatus: 'skipped',
+    },
+  }
+}
+
+function applyPaperFill(order) {
+  const side = normalizeSide(order.side)
+  const direction = getPositionDirection(side)
+  const existing = findOpenPosition(order.symbol, side)
+  const fillNotional = roundCurrency(order.fillPrice * order.quantity)
+
+  ledger.fills.unshift({
+    id: randomUUID(),
+    orderId: order.id,
+    symbol: order.symbol,
+    side,
+    quantity: order.quantity,
+    fillPrice: order.fillPrice,
+    notional: fillNotional,
+    createdAt: order.filledAt || new Date().toISOString(),
+  })
+
+  if (existing) {
+    const combinedQty = existing.quantity + order.quantity
+    const combinedNotional = existing.avgEntryPrice * existing.quantity + order.fillPrice * order.quantity
+    existing.quantity = roundQty(combinedQty)
+    existing.notional = roundCurrency(combinedNotional)
+    existing.avgEntryPrice = roundCurrency(combinedNotional / Math.max(combinedQty, 0.000001))
+    existing.updatedAt = new Date().toISOString()
+    existing.lastFillPrice = order.fillPrice
+    existing.lastOrderId = order.id
+    existing.marketPrice = order.fillPrice
+    existing.unrealizedPnl = roundCurrency((order.fillPrice - existing.avgEntryPrice) * existing.quantity * direction)
+    existing.unrealizedPnlPercent = existing.notional ? roundCurrency((existing.unrealizedPnl / existing.notional) * 100) : 0
+  } else {
+    ledger.positions.unshift({
+      id: randomUUID(),
+      symbol: order.symbol,
+      side,
+      status: 'OPEN',
+      quantity: order.quantity,
+      avgEntryPrice: order.fillPrice,
+      marketPrice: order.fillPrice,
+      notional: fillNotional,
+      unrealizedPnl: 0,
+      unrealizedPnlPercent: 0,
+      realizedPnl: 0,
+      direction,
+      openedAt: order.filledAt,
+      updatedAt: order.filledAt,
+      lastOrderId: order.id,
+      lastFillPrice: order.fillPrice,
+    })
+  }
+
+  ledger.orders.unshift(order)
+  persistLedger()
+  return order
+}
+
+function updatePositionMarks(symbol, marketPrice) {
+  for (const position of ledger.positions) {
+    if (position.symbol !== symbol || position.status !== 'OPEN') continue
+    position.marketPrice = roundCurrency(marketPrice)
+    position.unrealizedPnl = roundCurrency((marketPrice - position.avgEntryPrice) * position.quantity * position.direction)
+    position.unrealizedPnlPercent = position.notional ? roundCurrency((position.unrealizedPnl / position.notional) * 100) : 0
+    position.updatedAt = new Date().toISOString()
+  }
+}
+
+function getPaperSummary() {
+  const openPositions = ledger.positions.filter((item) => item.status === 'OPEN')
+  const unrealizedPnl = roundCurrency(openPositions.reduce((sum, item) => sum + Number(item.unrealizedPnl || 0), 0))
+  const realizedPnl = roundCurrency(openPositions.reduce((sum, item) => sum + Number(item.realizedPnl || 0), 0))
+  const grossExposure = roundCurrency(openPositions.reduce((sum, item) => sum + Number(item.notional || 0), 0))
+  const equity = roundCurrency(Number(ledger.account.startingEquity || PAPER_ACCOUNT_STARTING_EQUITY) + unrealizedPnl + realizedPnl)
+
+  return {
+    startingEquity: roundCurrency(ledger.account.startingEquity || PAPER_ACCOUNT_STARTING_EQUITY),
+    equity,
+    unrealizedPnl,
+    realizedPnl,
+    grossExposure,
+    openPositions: openPositions.length,
+    orderCount: ledger.orders.length,
+    updatedAt: ledger.account.updatedAt,
+  }
+}
+
 function broadcast(symbol, payload) {
   const clients = streamClients.get(symbol)
   if (!clients?.size) return
@@ -322,6 +540,8 @@ function attachHyperliquidStream(symbol) {
         })
 
         marketCache.set(symbol, nextPayload)
+        updatePositionMarks(symbol, nextPayload.price)
+        persistLedger()
         broadcast(symbol, nextPayload)
         return
       }
@@ -344,6 +564,8 @@ function attachHyperliquidStream(symbol) {
         })
 
         marketCache.set(symbol, nextPayload)
+        updatePositionMarks(symbol, nextPayload.price)
+        persistLedger()
         broadcast(symbol, nextPayload)
       }
     } catch {
@@ -502,10 +724,31 @@ function connectOpenClawAndDispatch(order) {
   })
 }
 
+function getFallbackAnalysis(symbol, mode, note = 'OpenAI analysis is currently unavailable.') {
+  return {
+    source: 'fallback-demo',
+    summary: `${symbol} shows bullish structure with controlled volatility. Suitable for monitored long exposure.`,
+    action: 'OPEN_LONG',
+    confidence: 0.82,
+    entry: 'Scale in 40% now, 35% retest, 25% breakout confirmation',
+    stopLoss: 'Below intraday support / 1.2% risk cap',
+    takeProfit: 'Partial TP at 1.5R, trail remainder',
+    mode,
+    reasoning: [
+      'Trend bias remains constructive on short timeframe candles.',
+      'Volume expansion suggests real participation, not weak drift.',
+      'Risk guard should remain enabled before execution.',
+    ],
+    note,
+  }
+}
+
 app.get('/api/market/:symbol', async (req, res) => {
   const raw = String(req.params.symbol || 'BTCUSDT').toUpperCase()
   const payload = await fetchMarketSnapshot(raw)
   marketCache.set(raw, payload)
+  updatePositionMarks(raw, payload.price)
+  persistLedger()
   res.json(payload)
 })
 
@@ -528,6 +771,8 @@ app.get('/api/stream/:symbol', async (req, res) => {
   }
 
   const bootstrapPayload = marketCache.get(symbol)
+  updatePositionMarks(symbol, bootstrapPayload.price)
+  persistLedger()
   res.write(`data: ${JSON.stringify(bootstrapPayload)}\n\n`)
 
   attachHyperliquidStream(symbol)
@@ -536,6 +781,8 @@ app.get('/api/stream/:symbol', async (req, res) => {
     try {
       const nextPayload = await fetchMarketSnapshot(symbol)
       marketCache.set(symbol, nextPayload)
+      updatePositionMarks(symbol, nextPayload.price)
+      persistLedger()
       broadcast(symbol, nextPayload)
     } catch {
       // keep latest cached market payload if refresh fails
@@ -554,25 +801,6 @@ app.get('/api/stream/:symbol', async (req, res) => {
     }
   })
 })
-
-function getFallbackAnalysis(symbol, mode, note = 'OpenAI analysis is currently unavailable.') {
-  return {
-    source: 'fallback-demo',
-    summary: `${symbol} shows bullish structure with controlled volatility. Suitable for monitored long exposure.`,
-    action: 'OPEN_LONG',
-    confidence: 0.82,
-    entry: 'Scale in 40% now, 35% retest, 25% breakout confirmation',
-    stopLoss: 'Below intraday support / 1.2% risk cap',
-    takeProfit: 'Partial TP at 1.5R, trail remainder',
-    mode,
-    reasoning: [
-      'Trend bias remains constructive on short timeframe candles.',
-      'Volume expansion suggests real participation, not weak drift.',
-      'Risk guard should remain enabled before execution.',
-    ],
-    note,
-  }
-}
 
 app.post('/api/ai/analyze', async (req, res) => {
   const { symbol = 'BTCUSDT', market, mode = 'Auto Execute' } = req.body || {}
@@ -653,79 +881,64 @@ app.post('/api/ai/analyze', async (req, res) => {
 
 app.post('/api/openclaw/execute', async (req, res) => {
   const { symbol, side, plan, mode = 'Auto Execute' } = req.body || {}
-  const id = randomUUID()
 
-  const order = {
-    id,
-    symbol,
-    side,
-    mode,
-    plan,
-    createdAt: new Date().toISOString(),
-    status: 'submitted',
-    provider: 'demo',
-    transport: 'local',
+  if (!symbol) {
+    return res.status(400).json({ ok: false, message: 'Symbol is required' })
   }
 
-  orders.set(id, order)
+  const market = marketCache.get(String(symbol).toUpperCase()) || await fetchMarketSnapshot(String(symbol).toUpperCase())
+  const order = createPaperOrder({ symbol, side, plan, mode }, market.price)
 
   try {
-    const result = await connectOpenClawAndDispatch(order)
-    const next = {
-      ...order,
-      ...result,
-      status: result.accepted ? 'approved' : 'failed',
-      updatedAt: new Date().toISOString(),
-      provider: 'openclaw',
-    }
-    orders.set(id, next)
-
-    setTimeout(() => {
-      const latest = orders.get(id)
-      if (!latest || latest.status !== 'approved') return
-      orders.set(id, {
-        ...latest,
-        status: 'executed',
-        updatedAt: new Date().toISOString(),
-      })
-    }, 3000)
-
-    return res.json({
-      ok: true,
-      id,
-      message: 'Execution request submitted to OpenClaw agent.',
-      nextStep: 'Track this order in the execution status panel.',
-      order: next,
-    })
+    const dispatch = await connectOpenClawAndDispatch(order)
+    order.metadata.openclawDispatchAttempted = true
+    order.metadata.openclawDispatchStatus = dispatch.accepted ? 'accepted' : 'rejected'
+    order.runId = dispatch.runId
+    order.agentStatus = dispatch.status
+    order.transport = dispatch.transport || order.transport
   } catch (error) {
-    const failed = {
-      ...order,
-      status: 'failed',
-      updatedAt: new Date().toISOString(),
-      error: error.message,
-    }
-    orders.set(id, failed)
-
-    return res.status(500).json({
-      ok: false,
-      id,
-      message: 'Failed to dispatch execution request to OpenClaw.',
-      order: failed,
-    })
+    order.metadata.openclawDispatchAttempted = true
+    order.metadata.openclawDispatchStatus = 'failed'
+    order.metadata.openclawDispatchError = error.message
   }
+
+  applyPaperFill(order)
+  updatePositionMarks(order.symbol, market.price)
+  persistLedger()
+
+  return res.json({
+    ok: true,
+    id: order.id,
+    message: 'Paper order filled and saved to the local ledger.',
+    nextStep: order.metadata.openclawDispatchStatus === 'accepted'
+      ? 'Paper position is active. OpenClaw also received the execution intent for operator visibility.'
+      : 'Paper position is active locally. OpenClaw dispatch was unavailable, so execution stayed in safe local paper mode.',
+    order,
+  })
 })
 
 app.get('/api/openclaw/orders', (_req, res) => {
-  const list = [...orders.values()].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
-  res.json({ ok: true, orders: list.slice(0, 20) })
+  const orders = [...ledger.orders].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+  res.json({ ok: true, orders: orders.slice(0, 50) })
 })
 
 app.get('/api/openclaw/orders/:id', (req, res) => {
-  const order = orders.get(req.params.id)
+  const order = ledger.orders.find((item) => item.id === req.params.id)
   if (!order) {
     return res.status(404).json({ ok: false, message: 'Order not found' })
   }
   res.json({ ok: true, order })
+})
+
+app.get('/api/paper/positions', (_req, res) => {
+  const positions = [...ledger.positions]
+    .filter((item) => item.status === 'OPEN')
+    .sort((a, b) => (a.openedAt < b.openedAt ? 1 : -1))
+  res.json({ ok: true, positions, summary: getPaperSummary() })
+})
+
+app.get('/api/paper/summary', (_req, res) => {
+  res.json({ ok: true, summary: getPaperSummary() })
 })
 
 app.get('/api/health', (_req, res) => {
@@ -738,6 +951,10 @@ app.get('/api/health', (_req, res) => {
     openclawUrl: OPENCLAW_URL,
     openclawWsUrl: OPENCLAW_WS_URL,
     executionSession: OPENCLAW_EXECUTION_SESSION,
+    paperTrading: {
+      ledgerFile: PAPER_LEDGER_FILE,
+      summary: getPaperSummary(),
+    },
   })
 })
 

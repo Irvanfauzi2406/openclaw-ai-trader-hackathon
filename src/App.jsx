@@ -18,10 +18,11 @@ import { SignalCard } from './components/SignalCard'
 import { ExecutionTimeline } from './components/ExecutionTimeline'
 import { LoadingState } from './components/LoadingState'
 import { OrderStatusPanel } from './components/OrderStatusPanel'
-import { watchlist, positions } from './data'
+import { watchlist } from './data'
 import { analyzeTrade } from './lib/api'
 import { useMarketData } from './hooks/useMarketData'
 import { useOrders } from './hooks/useOrders'
+import { usePaperPositions } from './hooks/usePaperPositions'
 import { useSystemHealth } from './hooks/useSystemHealth'
 
 const marketOptions = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'AVAXUSDT']
@@ -41,6 +42,11 @@ function getMarketSourceLabel(source) {
   return 'Demo Fallback Feed'
 }
 
+function formatSignedCurrency(value) {
+  const numeric = Number(value || 0)
+  return `${numeric >= 0 ? '+' : '-'}${currency.format(Math.abs(numeric))}`
+}
+
 export default function App() {
   const [symbol, setSymbol] = useState('BTCUSDT')
   const [mode, setMode] = useState('Auto Execute')
@@ -49,6 +55,7 @@ export default function App() {
   const [analysisError, setAnalysisError] = useState('')
   const { market, loading, streaming } = useMarketData(symbol)
   const { orders } = useOrders()
+  const { positions, summary: paperSummary } = usePaperPositions()
   const { health } = useSystemHealth()
 
   async function runAnalysis() {
@@ -70,25 +77,28 @@ export default function App() {
     runAnalysis()
   }, [symbol, market, mode])
 
+  const selectedPosition = useMemo(() => positions.find((item) => item.symbol === symbol), [positions, symbol])
+
   const summary = useMemo(() => {
     const price = market?.price ?? 0
     const change = market?.changePercent ?? 0
-    const pnl = (price * 0.0125) || 0
+    const projectedPnl = selectedPosition?.unrealizedPnl ?? ((price * 0.0125) || 0)
 
     return {
       price: currency.format(price),
       change: `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`,
-      pnl: `${pnl >= 0 ? '+' : '-'}${currency.format(Math.abs(pnl))}`,
+      pnl: formatSignedCurrency(projectedPnl),
       confidence: `${Math.round((analysis?.confidence ?? 0.82) * 100)}%`,
       risk: mode === 'Auto Execute' ? 'Managed Auto Risk' : 'Manual Guarded Risk',
       high: currency.format(market?.high24h ?? 0),
       low: currency.format(market?.low24h ?? 0),
       volume: new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(market?.volume ?? 0),
     }
-  }, [market, analysis, mode])
+  }, [market, analysis, mode, selectedPosition])
 
   const timeline = useMemo(() => {
     const hasAnalysis = Boolean(analysis)
+    const hasPaperOrders = orders.length > 0
     return [
       {
         title: 'Market feed connected',
@@ -111,17 +121,19 @@ export default function App() {
       {
         title: 'Validate execution controls',
         description: `${mode} mode keeps stop loss, sizing, and operator safeguards inside defined limits.`,
-        status: hasAnalysis ? 'active' : 'pending',
+        status: hasAnalysis ? 'done' : 'pending',
         statusLabel: hasAnalysis ? 'Ready' : 'Queued',
       },
       {
-        title: 'Route order to OpenClaw',
-        description: 'Validated order plans can be forwarded into your OpenClaw-connected execution workflow.',
-        status: 'pending',
-        statusLabel: 'Awaiting trigger',
+        title: 'Fill into paper ledger',
+        description: hasPaperOrders
+          ? 'Orders are persisted in the local paper ledger and tracked as live-marked demo positions.'
+          : 'The next approved trade will be filled into the local paper ledger with persistent state.',
+        status: hasPaperOrders ? 'done' : 'pending',
+        statusLabel: hasPaperOrders ? 'Active' : 'Awaiting trigger',
       },
     ]
-  }, [analysis, market, mode])
+  }, [analysis, market, mode, orders.length])
 
   const agentMessages = useMemo(() => {
     if (!analysis) {
@@ -140,11 +152,13 @@ export default function App() {
       },
       {
         role: 'OpenClaw',
-        text: `Execution mode: ${mode}. The order plan can be forwarded once the operator confirms the setup.`,
+        text: orders.length
+          ? 'Paper execution is active. New intents are recorded locally, and OpenClaw dispatch is used only as an optional operator visibility layer.'
+          : `Execution mode: ${mode}. The next validated setup can be forwarded into the paper ledger instantly.`,
       },
       ...(analysis.reasoning || []).slice(0, 2).map((item) => ({ role: 'GPT', text: item })),
     ]
-  }, [analysis, mode])
+  }, [analysis, mode, orders.length])
 
   return (
     <div className="app-shell terminal-shell">
@@ -160,7 +174,7 @@ export default function App() {
           <h1>ClawTrade Command Center</h1>
           <p>
             A premium operator terminal for live market monitoring, AI-assisted decisions,
-            and OpenClaw-powered execution.
+            and paper-trading execution with persistent state.
           </p>
         </div>
 
@@ -180,7 +194,7 @@ export default function App() {
         <div className="terminal-summary-main">
           <span className="section-kicker">Terminal Overview</span>
           <h2>{formatPair(symbol)} · AI-assisted execution desk</h2>
-          <p>Real-time market view, AI trade planning, and execution control in one compact layout.</p>
+          <p>Real-time market view, AI trade planning, paper execution, and portfolio state in one compact layout.</p>
         </div>
         <div className="terminal-summary-actions">
           {['Advisory', 'Semi Auto', 'Auto Execute'].map((item) => (
@@ -214,9 +228,9 @@ export default function App() {
         />
         <MetricCard
           icon={Wallet}
-          label="24H High / Low"
-          value={`${summary.high} / ${summary.low}`}
-          subValue={`Volume ${summary.volume}`}
+          label="Paper Equity"
+          value={currency.format(paperSummary?.equity ?? 0)}
+          subValue={`uPnL ${formatSignedCurrency(paperSummary?.unrealizedPnl ?? 0)}`}
           tone="purple"
           accent="market"
         />
@@ -224,7 +238,7 @@ export default function App() {
           icon={Gauge}
           label="Risk Status"
           value={summary.risk}
-          subValue="Position sizing protected"
+          subValue={`${paperSummary?.openPositions ?? 0} open positions`}
           tone="amber"
           accent="risk"
         />
@@ -279,7 +293,7 @@ export default function App() {
                 <strong>{summary.high} → {summary.low}</strong>
               </div>
               <div className="chart-stat-box">
-                <span>Strategy Projection</span>
+                <span>Selected Pair uPnL</span>
                 <strong>{summary.pnl}</strong>
               </div>
               <div className="chart-stat-box">
@@ -337,27 +351,27 @@ export default function App() {
                 <div className="panel-head compact">
                   <div>
                     <span className="section-kicker">Open Positions</span>
-                    <h3>Portfolio overview</h3>
+                    <h3>Paper portfolio overview</h3>
                   </div>
                   <div className="pill dark-pill subtle-pill">{positions.length} active positions</div>
                 </div>
                 <div className="position-list">
                   {positions.length ? positions.map((item) => (
-                    <div className="position-row" key={item.symbol}>
+                    <div className="position-row" key={item.id}>
                       <div>
                         <strong>{item.symbol}</strong>
                         <span>{item.side}</span>
                       </div>
                       <div>
-                        <strong>{item.size}</strong>
-                        <span>{item.entry}</span>
+                        <strong>{Number(item.quantity).toFixed(4)}</strong>
+                        <span>{currency.format(item.avgEntryPrice)}</span>
                       </div>
-                      <div className={item.pnl.startsWith('+') ? 'pos up' : 'pos down'}>
-                        <strong>{item.pnl}</strong>
-                        <span>{item.leverage}</span>
+                      <div className={Number(item.unrealizedPnl || 0) >= 0 ? 'pos up' : 'pos down'}>
+                        <strong>{formatSignedCurrency(item.unrealizedPnl)}</strong>
+                        <span>{Number(item.unrealizedPnlPercent || 0).toFixed(2)}%</span>
                       </div>
                     </div>
-                  )) : <div className="inline-note">Belum ada posisi real yang terhubung. Saat ini panel siap untuk integrasi paper trading atau broker/exchange adapter.</div>}
+                  )) : <div className="inline-note">Belum ada paper position. Jalankan trade pertama untuk mulai melacak PnL dan exposure secara persisten.</div>}
                 </div>
               </div>
 

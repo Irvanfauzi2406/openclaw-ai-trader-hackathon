@@ -48,6 +48,18 @@ export async function fetchOrders() {
   return response.json()
 }
 
+export async function fetchPaperPositions() {
+  const response = await fetch(`${API_BASE}/api/paper/positions`)
+  if (!response.ok) throw new Error('Failed to fetch paper positions')
+  return response.json()
+}
+
+export async function fetchPaperSummary() {
+  const response = await fetch(`${API_BASE}/api/paper/summary`)
+  if (!response.ok) throw new Error('Failed to fetch paper summary')
+  return response.json()
+}
+
 export async function fetchHealth() {
   const response = await fetch(`${API_BASE}/api/health`)
   if (!response.ok) throw new Error('Failed to fetch health')
