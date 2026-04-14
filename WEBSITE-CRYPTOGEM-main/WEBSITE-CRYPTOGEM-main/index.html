@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GovernanceFlow — dashboard governance maintenance untuk input data yang rapi, mudah dipahami, dan nyaman dipakai tim operasional.">
+<meta name="theme-color" content="#f6f8fc">
+<title>GovernanceFlow — Maintenance Governance Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="logo-mark">G</div>
+    <div class="logo-text">
+      <strong>GovernanceFlow</strong>
+      <span>Maintenance Governance Platform</span>
+    </div>
+  </div>
+
+  <button class="nav-hamburger" id="hamburger" aria-label="Buka menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#problem">Masalah</a></li>
+    <li><a href="#solution">Solusi</a></li>
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#workflow">Alur Kerja</a></li>
+    <li><a href="#audit">Audit Trail</a></li>
+  </ul>
+
+  <a href="#dashboard" class="nav-cta">Lihat Demo</a>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Hackathon Project · Governance</div>
+      <h1>Governance maintenance yang <span>lebih rapi</span>, lebih cepat, dan mudah dipakai semua generasi.</h1>
+      <p>
+        Web app sederhana untuk standarisasi input maintenance, validasi data otomatis, deteksi inkonsistensi,
+        dan dashboard keputusan yang jelas — dibuat supaya admin operasional sampai supervisor senior tetap nyaman pakainya.
+      </p>
+      <div class="hero-actions">
+        <a href="#dashboard" class="btn-primary">Buka Dashboard</a>
+        <a href="#workflow" class="btn-secondary">Lihat Alur Kerja</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-value">92%</div>
+          <div class="stat-label">Data lebih konsisten</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">-68%</div>
+          <div class="stat-label">Input typo berkurang</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3 Menit</div>
+          <div class="stat-label">Rata-rata isi form</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <div class="panel-window soft-shadow">
+        <div class="window-top">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="window-body">
+          <div class="mini-kpi-row">
+            <div class="mini-kpi success">
+              <small>Ticket Hari Ini</small>
+              <strong>148</strong>
+            </div>
+            <div class="mini-kpi warning">
+              <small>Butuh Review</small>
+              <strong>12</strong>
+            </div>
+          </div>
+          <div class="mini-form-card">
+            <div class="mini-form-title">Form Maintenance Standar</div>
+            <div class="fake-input">Asset ID: <b>TRK-PLT-204</b></div>
+            <div class="fake-input">Lokasi: <b>Warehouse Bekasi 2</b></div>
+            <div class="fake-input">Jenis Maintenance: <b>Preventive</b></div>
+            <div class="fake-alert">✓ Format valid · ✓ Asset terdaftar · ⚠ Jadwal hampir bentrok</div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-list-item">
+              <span class="dot green"></span>
+              <p>Data bersih langsung masuk dashboard</p>
+            </div>
+            <div class="mini-list-item">
+              <span class="dot orange"></span>
+              <p>Data janggal otomatis masuk review</p>
+            </div>
+            <div class="mini-list-item">
+              <span class="dot blue"></span>
+              <p>Supervisor tinggal approve atau revisi</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="problem">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Masalah Utama</div>
+      <h2>Data maintenance manual bikin keputusan ikut berantakan.</h2>
+      <p>Format beda-beda, typo, kolom kosong, dan tidak ada audit trail yang jelas. Akhirnya planning maintenance lambat, biaya naik, dan potensi downtime ikut membesar.</p>
+    </div>
+
+    <div class="issue-grid">
+      <article class="issue-card soft-shadow">
+        <div class="issue-icon red">!</div>
+        <h3>Input Tidak Seragam</h3>
+        <p>Nama aset, lokasi, dan status sering ditulis berbeda-beda oleh tim yang berbeda.</p>
+      </article>
+      <article class="issue-card soft-shadow">
+        <div class="issue-icon orange">≠</div>
+        <h3>Data Sulit Diverifikasi</h3>
+        <p>Tidak ada alur validasi yang konsisten untuk memastikan data benar sebelum dipakai.</p>
+      </article>
+      <article class="issue-card soft-shadow">
+        <div class="issue-icon blue">⏱</div>
+        <h3>Respons Lambat</h3>
+        <p>Supervisor harus cek manual satu-satu saat ada data meragukan atau duplikat.</p>
+      </article>
+      <article class="issue-card soft-shadow">
+        <div class="issue-icon green">✓</div>
+        <h3>Akuntabilitas Lemah</h3>
+        <p>Riwayat perubahan dan approval sering tidak terdokumentasi dengan baik.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="solution">
+  <div class="container split-layout">
+    <div>
+      <div class="section-head left">
+        <div class="eyebrow">Solusi</div>
+        <h2>Satu dashboard, tiga fungsi penting.</h2>
+        <p>GovernanceFlow menyatukan form standar, validasi real-time, dan monitoring eksekutif dalam antarmuka yang besar, jelas, dan tidak bikin user senior pusing.</p>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-row">
+          <div class="feature-badge">1</div>
+          <div>
+            <h3>Smart Input Form</h3>
+            <p>Field dibuat sederhana, tulisan besar, kontras tinggi, dan petunjuk jelas supaya human error turun.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-badge">2</div>
+          <div>
+            <h3>Validation & Review</h3>
+            <p>System menandai typo, duplikasi, format salah, atau jadwal bentrok sebelum data dipakai.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-badge">3</div>
+          <div>
+            <h3>Governance Dashboard</h3>
+            <p>Manager bisa melihat KPI, issue kritis, approval queue, dan audit trail dalam satu tampilan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card soft-shadow">
+      <h3>Nilai utama untuk Governance</h3>
+      <ul class="check-list">
+        <li>Standarisasi proses input</li>
+        <li>Transparansi perubahan data</li>
+        <li>Akuntabilitas approval</li>
+        <li>Kualitas data lebih tinggi</li>
+        <li>Planning maintenance lebih presisi</li>
+      </ul>
+      <div class="summary-note">
+        Cocok untuk operasional logistik, fleet management, warehouse, dan maintenance asset internal.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="dashboard">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Demo Dashboard</div>
+      <h2>Tampilan utama yang simpel, modern, dan gampang dibaca.</h2>
+      <p>Fokus desainnya bukan sok futuristik. Fokusnya: tombol jelas, angka besar, warna bermakna, dan alur yang gampang dipahami.</p>
+    </div>
+
+    <div class="kpi-grid">
+      <article class="kpi-card soft-shadow">
+        <span class="kpi-label">Total Ticket Maintenance</span>
+        <strong class="kpi-value">1,284</strong>
+        <span class="kpi-sub">Bulan ini</span>
+      </article>
+      <article class="kpi-card soft-shadow success">
+        <span class="kpi-label">Valid Data Rate</span>
+        <strong class="kpi-value">94%</strong>
+        <span class="kpi-sub">Naik 12% dari bulan lalu</span>
+      </article>
+      <article class="kpi-card soft-shadow warning">
+        <span class="kpi-label">Pending Review</span>
+        <strong class="kpi-value">27</strong>
+        <span class="kpi-sub">Perlu verifikasi supervisor</span>
+      </article>
+      <article class="kpi-card soft-shadow info">
+        <span class="kpi-label">High Risk Assets</span>
+        <strong class="kpi-value">8</strong>
+        <span class="kpi-sub">Perlu tindakan cepat</span>
+      </article>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="card soft-shadow form-card">
+        <div class="card-head">
+          <div>
+            <h3>Input Maintenance Baru</h3>
+            <p>Form ringkas dengan validasi langsung</p>
+          </div>
+          <span class="status-pill status-live">Live Validation</span>
+        </div>
+
+        <form class="maintenance-form" onsubmit="return false;">
+          <div class="form-grid">
+            <label>
+              <span>Asset ID</span>
+              <input type="text" value="TRK-PLT-204" readonly>
+            </label>
+            <label>
+              <span>Lokasi</span>
+              <input type="text" value="Warehouse Bekasi 2" readonly>
+            </label>
+            <label>
+              <span>Jenis Maintenance</span>
+              <select disabled>
+                <option selected>Preventive Maintenance</option>
+              </select>
+            </label>
+            <label>
+              <span>Tanggal</span>
+              <input type="text" value="14 April 2026" readonly>
+            </label>
+            <label>
+              <span>Teknisi</span>
+              <input type="text" value="Budi Santoso" readonly>
+            </label>
+            <label>
+              <span>Status</span>
+              <select disabled>
+                <option selected>Menunggu Approval</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="full-width">
+            <span>Catatan</span>
+            <textarea rows="4" readonly>Pemeriksaan conveyor line 3. Terdapat getaran abnormal ringan. Rekomendasi pengecekan lanjutan bearing dalam 24 jam.</textarea>
+          </label>
+
+          <div class="validation-box">
+            <div class="validation-item ok">✓ Asset terdaftar di master data</div>
+            <div class="validation-item ok">✓ Format tanggal sesuai standar</div>
+            <div class="validation-item warn">⚠ Ada histori issue serupa minggu lalu</div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-primary">Simpan Data</button>
+            <button class="btn-secondary">Kirim ke Reviewer</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="dashboard-side">
+        <div class="card soft-shadow review-card">
+          <div class="card-head">
+            <div>
+              <h3>Review Prioritas</h3>
+              <p>Data yang perlu tindakan</p>
+            </div>
+          </div>
+          <div class="review-list">
+            <div class="review-item critical">
+              <div>
+                <strong>Forklift FL-12</strong>
+                <p>Lokasi tidak sesuai histori terakhir</p>
+              </div>
+              <span>High</span>
+            </div>
+            <div class="review-item medium">
+              <div>
+                <strong>Conveyor CV-08</strong>
+                <p>Potensi duplikat ticket dalam 2 jam</p>
+              </div>
+              <span>Medium</span>
+            </div>
+            <div class="review-item low">
+              <div>
+                <strong>Truck TR-77</strong>
+                <p>Catatan terlalu pendek, butuh detail</p>
+              </div>
+              <span>Low</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card soft-shadow chart-card">
+          <div class="card-head">
+            <div>
+              <h3>Kualitas Input Mingguan</h3>
+              <p>Simulasi 7 hari terakhir</p>
+            </div>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span>Sen</span><div class="bar"><i style="width:82%"></i></div><b>82%</b></div>
+            <div class="bar-row"><span>Sel</span><div class="bar"><i style="width:88%"></i></div><b>88%</b></div>
+            <div class="bar-row"><span>Rab</span><div class="bar"><i style="width:84%"></i></div><b>84%</b></div>
+            <div class="bar-row"><span>Kam</span><div class="bar"><i style="width:91%"></i></div><b>91%</b></div>
+            <div class="bar-row"><span>Jum</span><div class="bar"><i style="width:94%"></i></div><b>94%</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="workflow">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Alur Kerja</div>
+      <h2>Dari input sampai approval, semuanya jelas.</h2>
+      <p>Alur dibuat singkat supaya user tidak kebanyakan klik. Semakin sedikit kebingungan, semakin bagus governance-nya. Sesimpel itu.</p>
+    </div>
+
+    <div class="workflow-grid">
+      <article class="workflow-card soft-shadow">
+        <div class="workflow-step">01</div>
+        <h3>Input Data</h3>
+        <p>Admin mengisi form dengan field wajib yang sudah distandarkan.</p>
+      </article>
+      <article class="workflow-card soft-shadow">
+        <div class="workflow-step">02</div>
+        <h3>Validasi Otomatis</h3>
+        <p>Sistem mengecek format, duplikasi, master asset, dan jadwal terkait.</p>
+      </article>
+      <article class="workflow-card soft-shadow">
+        <div class="workflow-step">03</div>
+        <h3>Review Supervisor</h3>
+        <p>Data bermasalah masuk queue review, data valid langsung lanjut.</p>
+      </article>
+      <article class="workflow-card soft-shadow">
+        <div class="workflow-step">04</div>
+        <h3>Audit & Insight</h3>
+        <p>Semua perubahan tercatat, KPI langsung terbaca di dashboard.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="audit">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Audit Trail</div>
+      <h2>Setiap perubahan tercatat rapi.</h2>
+      <p>Ini penting buat governance: siapa yang input, siapa yang revisi, kapan diubah, dan kenapa diubah.</p>
+    </div>
+
+    <div class="table-card soft-shadow">
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th>Waktu</th>
+            <th>Asset</th>
+            <th>Aksi</th>
+            <th>Pengguna</th>
+            <th>Status</th>
+            <th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody id="auditRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-section">
+  <div class="container cta-box soft-shadow">
+    <div>
+      <div class="eyebrow">Pitch Singkat</div>
+      <h2>GovernanceFlow membantu perusahaan menjaga kualitas data maintenance tanpa bikin tim operasional kewalahan.</h2>
+      <p>Simple enough for boomers. Strong enough for managers. Structured enough for governance.</p>
+    </div>
+    <a href="#home" class="btn-primary">Kembali ke Atas</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <strong>GovernanceFlow</strong>
+      <p>Hackathon concept · Governance category</p>
+    </div>
+    <div class="footer-links">
+      <a href="#problem">Masalah</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#audit">Audit</a>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
