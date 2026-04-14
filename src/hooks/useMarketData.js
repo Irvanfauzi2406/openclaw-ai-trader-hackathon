@@ -34,7 +34,7 @@ export function useMarketData(symbol) {
           if (!active) return
           setMarket(payload)
           setError('')
-          setStreaming(['binance-stream', 'binance', 'coingecko'].includes(payload?.source))
+          setStreaming(Boolean(payload?.source && !String(payload.source).includes('fallback')))
         },
         () => {
           if (!active) return

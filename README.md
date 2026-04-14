@@ -23,7 +23,7 @@ It unifies:
 The system includes:
 - React frontend
 - Express backend
-- Binance REST + WebSocket data ingestion
+- Hyperliquid REST-style info endpoint + WebSocket data ingestion
 - OpenAI GPT analysis
 - OpenClaw WebSocket execution bridge
 - order lifecycle tracking
@@ -41,7 +41,7 @@ This app is designed around that real workflow.
 ## Features
 
 - **Live candlestick chart** for crypto assets
-- **Live market feed** with Binance primary source, CoinGecko live fallback, and cached snapshot stabilization
+- **Live market feed** with Hyperliquid primary source, CoinGecko live fallback, and cached snapshot stabilization
 - **GPT trade copilot** with:
   - trade summary
   - action recommendation
@@ -72,7 +72,7 @@ This app is designed around that real workflow.
 - **Frontend:** React + Vite
 - **Charting:** lightweight-charts
 - **Backend:** Express
-- **Market Data:** Binance REST + Binance WebSocket + CoinGecko fallback
+- **Market Data:** Hyperliquid info endpoint + Hyperliquid WebSocket + CoinGecko fallback
 - **AI:** OpenAI Responses API (GPT)
 - **Agent Layer:** OpenClaw Gateway WebSocket
 
@@ -163,6 +163,10 @@ Create a `.env` file if needed:
 OPENAI_API_KEY=your_key_here
 OPENAI_MODEL=gpt-4o-mini
 
+MARKET_PROVIDER=hyperliquid
+HYPERLIQUID_INFO_URL=https://api.hyperliquid.xyz/info
+HYPERLIQUID_WS_URL=wss://api.hyperliquid.xyz/ws
+
 OPENCLAW_URL=http://127.0.0.1:18789
 OPENCLAW_WS_URL=ws://127.0.0.1:18789
 OPENCLAW_GATEWAY_TOKEN=your_gateway_token_if_enabled
@@ -194,8 +198,8 @@ VITE_API_BASE=http://127.0.0.1:8787
 
 ```mermaid
 flowchart LR
-    A[Binance REST API] --> B[Express Backend]
-    C[Binance WebSocket Stream] --> B
+    A[Hyperliquid Info API] --> B[Express Backend]
+    C[Hyperliquid WebSocket Stream] --> B
     D[CoinGecko Fallback API] --> B
     E[OpenAI GPT Analysis] --> B
     B --> F[React Trading Dashboard]

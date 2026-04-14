@@ -29,6 +29,9 @@ const seeds = {
 
 export function CandleChart({ symbol, candles = [] }) {
   const containerRef = useRef(null)
+  const chartRef = useRef(null)
+  const seriesRef = useRef(null)
+  const lastTimeRef = useRef(null)
   const latest = candles?.[candles.length - 1]
   const previous = candles?.[candles.length - 2]
   const direction = latest && previous ? latest.close >= previous.close : true
@@ -52,7 +55,7 @@ export function CandleChart({ symbol, candles = [] }) {
       timeScale: {
         borderColor: 'rgba(148,163,184,0.12)',
         timeVisible: true,
-        secondsVisible: false,
+        secondsVisible: true,
       },
     })
 
@@ -64,13 +67,42 @@ export function CandleChart({ symbol, candles = [] }) {
       wickDownColor: '#ef4444',
     })
 
-    const safeCandles = candles.length ? candles : generateCandles(seeds[symbol] || 68200)
-    series.setData(safeCandles)
-    chart.timeScale().fitContent()
+    chartRef.current = chart
+    seriesRef.current = series
 
     return () => {
+      lastTimeRef.current = null
+      seriesRef.current = null
+      chartRef.current = null
       chart.remove()
     }
+  }, [symbol])
+
+  useEffect(() => {
+    const series = seriesRef.current
+    const chart = chartRef.current
+    if (!series || !chart) return
+
+    const safeCandles = candles.length ? candles : generateCandles(seeds[symbol] || 68200)
+    if (!safeCandles.length) return
+
+    const normalized = [...safeCandles].sort((a, b) => a.time - b.time)
+    const latestTime = normalized[normalized.length - 1]?.time
+
+    if (lastTimeRef.current === null || normalized.length < 3) {
+      series.setData(normalized)
+      chart.timeScale().fitContent()
+    } else {
+      const previousTime = lastTimeRef.current
+      if (latestTime === previousTime) {
+        series.update(normalized[normalized.length - 1])
+      } else {
+        const tail = normalized.slice(-3)
+        tail.forEach((candle) => series.update(candle))
+      }
+    }
+
+    lastTimeRef.current = latestTime
   }, [symbol, candles])
 
   return (

@@ -12,6 +12,9 @@ const OPENCLAW_URL = process.env.OPENCLAW_URL || 'http://127.0.0.1:18789'
 const OPENCLAW_WS_URL = process.env.OPENCLAW_WS_URL || 'ws://127.0.0.1:18789'
 const OPENCLAW_GATEWAY_TOKEN = process.env.OPENCLAW_GATEWAY_TOKEN || ''
 const OPENCLAW_EXECUTION_SESSION = process.env.OPENCLAW_EXECUTION_SESSION || 'main'
+const MARKET_PROVIDER = process.env.MARKET_PROVIDER || 'hyperliquid'
+const HYPERLIQUID_INFO_URL = process.env.HYPERLIQUID_INFO_URL || 'https://api.hyperliquid.xyz/info'
+const HYPERLIQUID_WS_URL = process.env.HYPERLIQUID_WS_URL || 'wss://api.hyperliquid.xyz/ws'
 
 app.use(cors())
 app.use(express.json())
@@ -23,11 +26,11 @@ const symbolAnchors = {
   AVAXUSDT: 54,
 }
 
-const coingeckoMap = {
-  BTCUSDT: 'bitcoin',
-  ETHUSDT: 'ethereum',
-  SOLUSDT: 'solana',
-  AVAXUSDT: 'avalanche-2',
+const marketSymbols = {
+  BTCUSDT: { hyperliquid: 'BTC', coingecko: 'bitcoin' },
+  ETHUSDT: { hyperliquid: 'ETH', coingecko: 'ethereum' },
+  SOLUSDT: { hyperliquid: 'SOL', coingecko: 'solana' },
+  AVAXUSDT: { hyperliquid: 'AVAX', coingecko: 'avalanche-2' },
 }
 
 const marketCache = new Map()
@@ -68,30 +71,71 @@ function getFallbackMarket(raw, message) {
   }
 }
 
-async function fetchBinance24h(symbol = 'BTCUSDT') {
-  const response = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`)
-  if (!response.ok) throw new Error(`Binance ticker failed: ${response.status}`)
+function mapSymbol(symbol = 'BTCUSDT') {
+  return marketSymbols[symbol] || { hyperliquid: symbol.replace(/USDT$/, ''), coingecko: null }
+}
+
+async function postHyperliquidInfo(body) {
+  const response = await fetch(HYPERLIQUID_INFO_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Hyperliquid info failed: ${response.status}`)
+  }
+
   return response.json()
 }
 
-async function fetchBinanceKlines(symbol = 'BTCUSDT', interval = '1m', limit = 120) {
-  const response = await fetch(
-    `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`,
-  )
-  if (!response.ok) throw new Error(`Binance klines failed: ${response.status}`)
-  const rows = await response.json()
-  return rows.map((row) => ({
-    time: Math.floor(row[0] / 1000),
-    open: Number(row[1]),
-    high: Number(row[2]),
-    low: Number(row[3]),
-    close: Number(row[4]),
-    volume: Number(row[5]),
-  }))
+function normalizeHyperliquidCandle(row) {
+  return {
+    time: Math.floor(Number(row.t) / 1000),
+    open: Number(row.o),
+    high: Number(row.h),
+    low: Number(row.l),
+    close: Number(row.c),
+    volume: Number(row.v || 0),
+  }
+}
+
+async function fetchHyperliquidMarket(symbol = 'BTCUSDT') {
+  const { hyperliquid: coin } = mapSymbol(symbol)
+  const [mids, metaAndAssetCtxs, candles] = await Promise.all([
+    postHyperliquidInfo({ type: 'allMids' }),
+    postHyperliquidInfo({ type: 'metaAndAssetCtxs' }),
+    postHyperliquidInfo({ type: 'candleSnapshot', req: { coin, interval: '1m', startTime: Date.now() - 120 * 60 * 1000, endTime: Date.now() } }),
+  ])
+
+  const mid = Number(mids?.[coin] || 0)
+  const assetCtx = Array.isArray(metaAndAssetCtxs?.[1])
+    ? metaAndAssetCtxs[1].find((item) => String(item?.coin || '').toUpperCase() === coin.toUpperCase())
+    : null
+
+  const parsedCandles = Array.isArray(candles) ? candles.map(normalizeHyperliquidCandle).slice(-120) : []
+  const lastPrice = Number(assetCtx?.markPx || assetCtx?.midPx || mid || parsedCandles.at(-1)?.close || symbolAnchors[symbol] || 100)
+  const high24h = Number(assetCtx?.dayHigh || Math.max(...parsedCandles.map((item) => item.high), lastPrice))
+  const low24h = Number(assetCtx?.dayLow || Math.min(...parsedCandles.map((item) => item.low), lastPrice))
+  const prevDayPx = Number(assetCtx?.prevDayPx || lastPrice)
+  const changePercent = prevDayPx ? ((lastPrice - prevDayPx) / prevDayPx) * 100 : 0
+  const volume = Number(assetCtx?.dayNtlVlm || 0)
+
+  return {
+    source: 'hyperliquid',
+    symbol,
+    price: lastPrice,
+    changePercent,
+    high24h,
+    low24h,
+    volume,
+    candles: parsedCandles.length ? parsedCandles : buildCandles(symbol, 120),
+    lastUpdatedAt: new Date().toISOString(),
+  }
 }
 
 async function fetchCoinGeckoMarket(symbol = 'BTCUSDT') {
-  const assetId = coingeckoMap[symbol]
+  const assetId = mapSymbol(symbol).coingecko
   if (!assetId) {
     throw new Error(`CoinGecko asset is not mapped for ${symbol}`)
   }
@@ -182,32 +226,35 @@ function getResilientCachedMarket(symbol, reason) {
 }
 
 async function fetchMarketSnapshot(symbol = 'BTCUSDT') {
-  try {
-    const [ticker, candles] = await Promise.all([
-      fetchBinance24h(symbol),
-      fetchBinanceKlines(symbol, '1m', 120),
-    ])
+  const primaryProvider = String(MARKET_PROVIDER || 'hyperliquid').toLowerCase()
 
-    return rememberGoodMarket(symbol, {
-      source: 'binance',
-      symbol,
-      price: Number(ticker.lastPrice),
-      changePercent: Number(ticker.priceChangePercent),
-      high24h: Number(ticker.highPrice),
-      low24h: Number(ticker.lowPrice),
-      volume: Number(ticker.quoteVolume),
-      candles,
-      lastUpdatedAt: new Date().toISOString(),
-    })
-  } catch (binanceError) {
+  try {
+    if (primaryProvider === 'hyperliquid') {
+      return rememberGoodMarket(symbol, await fetchHyperliquidMarket(symbol))
+    }
+  } catch (primaryError) {
     try {
       const market = await fetchCoinGeckoMarket(symbol)
       return rememberGoodMarket(symbol, {
         ...market,
-        fallbackReason: binanceError.message,
+        fallbackReason: primaryError.message,
       })
     } catch (coingeckoError) {
-      return getResilientCachedMarket(symbol, `${binanceError.message}; ${coingeckoError.message}`)
+      return getResilientCachedMarket(symbol, `${primaryError.message}; ${coingeckoError.message}`)
+    }
+  }
+
+  try {
+    return rememberGoodMarket(symbol, await fetchHyperliquidMarket(symbol))
+  } catch (hyperliquidError) {
+    try {
+      const market = await fetchCoinGeckoMarket(symbol)
+      return rememberGoodMarket(symbol, {
+        ...market,
+        fallbackReason: hyperliquidError.message,
+      })
+    } catch (coingeckoError) {
+      return getResilientCachedMarket(symbol, `${hyperliquidError.message}; ${coingeckoError.message}`)
     }
   }
 }
@@ -221,45 +268,84 @@ function broadcast(symbol, payload) {
   }
 }
 
-function attachBinanceStream(symbol) {
+function attachHyperliquidStream(symbol) {
   if (streamClients.has(`${symbol}:socket`)) return
 
-  const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_1m`)
+  const { hyperliquid: coin } = mapSymbol(symbol)
+  const ws = new WebSocket(HYPERLIQUID_WS_URL)
   streamClients.set(`${symbol}:socket`, ws)
+
+  ws.on('open', () => {
+    ws.send(
+      JSON.stringify({
+        method: 'subscribe',
+        subscription: { type: 'candle', coin, interval: '1m' },
+      }),
+    )
+
+    ws.send(
+      JSON.stringify({
+        method: 'subscribe',
+        subscription: { type: 'activeAssetCtx', coin },
+      }),
+    )
+  })
 
   ws.on('message', (rawMessage) => {
     try {
-      const data = JSON.parse(rawMessage.toString())
-      const k = data?.k
-      if (!k) return
-
+      const message = JSON.parse(rawMessage.toString())
       const previous = marketCache.get(symbol) || getFallbackMarket(symbol)
-      const incomingCandle = {
-        time: Math.floor(k.t / 1000),
-        open: Number(k.o),
-        high: Number(k.h),
-        low: Number(k.l),
-        close: Number(k.c),
-        volume: Number(k.v),
+
+      if (message?.channel === 'candle') {
+        const incoming = Array.isArray(message.data)
+          ? message.data.map(normalizeHyperliquidCandle)
+          : message?.data
+            ? [normalizeHyperliquidCandle(message.data)]
+            : []
+
+        if (!incoming.length) return
+
+        const byTime = new Map((previous.candles || []).map((candle) => [candle.time, candle]))
+        for (const candle of incoming) {
+          byTime.set(candle.time, candle)
+        }
+
+        const candles = [...byTime.values()].sort((a, b) => a.time - b.time).slice(-120)
+        const latest = candles[candles.length - 1]
+        const nextPayload = rememberGoodMarket(symbol, {
+          ...previous,
+          source: 'hyperliquid-stream',
+          symbol,
+          price: latest?.close ?? previous.price,
+          candles,
+          lastUpdatedAt: new Date().toISOString(),
+        })
+
+        marketCache.set(symbol, nextPayload)
+        broadcast(symbol, nextPayload)
+        return
       }
 
-      const existing = [...(previous.candles || [])]
-      if (existing.length && existing[existing.length - 1].time === incomingCandle.time) {
-        existing[existing.length - 1] = incomingCandle
-      } else {
-        existing.push(incomingCandle)
+      if (message?.channel === 'activeAssetCtx' && message?.data?.ctx) {
+        const ctx = message.data.ctx
+        const nextPayload = rememberGoodMarket(symbol, {
+          ...previous,
+          source: 'hyperliquid-stream',
+          symbol,
+          price: Number(ctx.markPx || ctx.midPx || previous.price),
+          high24h: Number(ctx.dayHigh || previous.high24h),
+          low24h: Number(ctx.dayLow || previous.low24h),
+          volume: Number(ctx.dayNtlVlm || previous.volume || 0),
+          changePercent: Number(ctx.prevDayPx)
+            ? ((Number(ctx.markPx || ctx.midPx || previous.price) - Number(ctx.prevDayPx)) / Number(ctx.prevDayPx)) * 100
+            : previous.changePercent,
+          candles: previous.candles || [],
+          lastUpdatedAt: new Date().toISOString(),
+        })
+
+        marketCache.set(symbol, nextPayload)
+        broadcast(symbol, nextPayload)
       }
-
-      const nextPayload = rememberGoodMarket(symbol, {
-        ...previous,
-        source: 'binance-stream',
-        symbol,
-        price: incomingCandle.close,
-        candles: existing.slice(-120),
-      })
-
-      marketCache.set(symbol, nextPayload)
-      broadcast(symbol, nextPayload)
     } catch {
       // ignore malformed stream payloads
     }
@@ -268,7 +354,7 @@ function attachBinanceStream(symbol) {
   ws.on('close', () => {
     streamClients.delete(`${symbol}:socket`)
     if ((streamClients.get(symbol)?.size || 0) > 0) {
-      setTimeout(() => attachBinanceStream(symbol), 2000)
+      setTimeout(() => attachHyperliquidStream(symbol), 2000)
     }
   })
 
@@ -444,9 +530,7 @@ app.get('/api/stream/:symbol', async (req, res) => {
   const bootstrapPayload = marketCache.get(symbol)
   res.write(`data: ${JSON.stringify(bootstrapPayload)}\n\n`)
 
-  if (bootstrapPayload?.source === 'binance') {
-    attachBinanceStream(symbol)
-  }
+  attachHyperliquidStream(symbol)
 
   const refreshInterval = setInterval(async () => {
     try {
@@ -456,7 +540,7 @@ app.get('/api/stream/:symbol', async (req, res) => {
     } catch {
       // keep latest cached market payload if refresh fails
     }
-  }, 15000)
+  }, 10000)
 
   req.on('close', () => {
     clearInterval(refreshInterval)
@@ -648,6 +732,9 @@ app.get('/api/health', (_req, res) => {
   res.json({
     ok: true,
     service: 'openclaw-ai-trader-api',
+    marketProvider: MARKET_PROVIDER,
+    hyperliquidInfoUrl: HYPERLIQUID_INFO_URL,
+    hyperliquidWsUrl: HYPERLIQUID_WS_URL,
     openclawUrl: OPENCLAW_URL,
     openclawWsUrl: OPENCLAW_WS_URL,
     executionSession: OPENCLAW_EXECUTION_SESSION,
