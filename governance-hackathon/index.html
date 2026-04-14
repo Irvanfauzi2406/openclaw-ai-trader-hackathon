@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GovernanceFlow — AI-assisted maintenance governance platform untuk standarisasi input, validasi data, review approval, dan audit trail yang mudah dipahami.">
+<meta name="theme-color" content="#f6f8fc">
+<title>GovernanceFlow — AI Maintenance Governance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="logo-mark">G</div>
+    <div class="logo-text">
+      <strong>GovernanceFlow</strong>
+      <span>AI Maintenance Governance</span>
+    </div>
+  </div>
+
+  <button class="nav-hamburger" id="hamburger" aria-label="Buka menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#problem">Masalah</a></li>
+    <li><a href="#solution">Solusi</a></li>
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#audit">Audit</a></li>
+  </ul>
+
+  <a href="#dashboard" class="nav-cta">Try Demo</a>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Hackathon Project · Governance</div>
+      <h1>Data maintenance yang tadinya berantakan, sekarang jadi <span>terstruktur, tervalidasi, dan bisa diaudit</span>.</h1>
+      <p>
+        GovernanceFlow adalah web app berbasis AI-assisted validation untuk membantu tim operasional, supervisor,
+        dan manager menjaga kualitas data maintenance. Lebih sedikit typo, lebih sedikit duplikasi,
+        dan keputusan maintenance jadi lebih cepat diambil.
+      </p>
+      <div class="hero-actions">
+        <a href="#dashboard" class="btn-primary">Explore Dashboard</a>
+        <a href="#impact" class="btn-secondary">See Business Impact</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-value">94%</div>
+          <div class="stat-label">Data valid after submission</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">-68%</div>
+          <div class="stat-label">Manual correction workload</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">+37%</div>
+          <div class="stat-label">Faster approval readiness</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <div class="panel-window soft-shadow">
+        <div class="window-top">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="window-body">
+          <div class="mini-kpi-row">
+            <div class="mini-kpi success">
+              <small>Validated Tickets</small>
+              <strong>148</strong>
+            </div>
+            <div class="mini-kpi warning">
+              <small>Need Review</small>
+              <strong>12</strong>
+            </div>
+          </div>
+          <div class="mini-form-card">
+            <div class="mini-form-title">Real-time Validation Snapshot</div>
+            <div class="fake-input">Asset ID: <b>TRK-PLT-204</b></div>
+            <div class="fake-input">Location: <b>Warehouse Bekasi 2</b></div>
+            <div class="fake-input">Maintenance Type: <b>Preventive</b></div>
+            <div class="fake-alert">✓ Asset verified · ✓ Format valid · ⚠ Similar issue found 6 days ago</div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-list-item">
+              <span class="dot green"></span>
+              <p>Clean entries go directly to the dashboard</p>
+            </div>
+            <div class="mini-list-item">
+              <span class="dot orange"></span>
+              <p>Suspicious entries go to supervisor review</p>
+            </div>
+            <div class="mini-list-item">
+              <span class="dot blue"></span>
+              <p>All changes are recorded in audit trail</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="problem">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Problem Statement</div>
+      <h2>Maintenance records often fail before the machines do.</h2>
+      <p>Many organizations still rely on manual logging, inconsistent naming, and fragmented approval flows. The result is poor data integrity, slow decision-making, and increased operational risk.</p>
+    </div>
+
+    <div class="issue-grid">
+      <article class="issue-card soft-shadow">
+        <div class="issue-icon red">!</div>
+        <h3>Inconsistent Input</h3>
+        <p>Asset names, location labels, and status values are often entered in different formats.</p>
+      </article>
+      <article class="issue-card soft-shadow">
+        <div class="issue-icon orange">≠</div>
+        <h3>Weak Validation</h3>
+        <p>Teams submit records without a consistent mechanism to detect duplicates or malformed entries.</p>
+      </article>
+      <article class="issue-card soft-shadow">
+        <div class="issue-icon blue">⏱</div>
+        <h3>Slow Approval Flow</h3>
+        <p>Supervisors waste time checking questionable entries manually instead of acting on real issues.</p>
+      </article>
+      <article class="issue-card soft-shadow">
+        <div class="issue-icon green">✓</div>
+        <h3>Low Accountability</h3>
+        <p>There is no clear trail showing who changed what, when, and for what reason.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="solution">
+  <div class="container split-layout">
+    <div>
+      <div class="section-head left">
+        <div class="eyebrow">Solution Overview</div>
+        <h2>One interface that standardizes input, flags risk, and supports governance.</h2>
+        <p>GovernanceFlow combines structured forms, AI-assisted validation, approval routing, and audit visibility in a dashboard designed for clarity — especially for non-technical and senior users.</p>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-row">
+          <div class="feature-badge">1</div>
+          <div>
+            <h3>Standardized Smart Form</h3>
+            <p>Clean layout, larger text, clear field grouping, and mandatory structure reduce confusion and prevent missing data.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-badge">2</div>
+          <div>
+            <h3>AI-assisted Validation</h3>
+            <p>The system checks format errors, unusual values, duplicate patterns, and possible inconsistencies before records move forward.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-badge">3</div>
+          <div>
+            <h3>Approval & Audit Governance</h3>
+            <p>Supervisors review only what matters, while every action remains traceable for accountability and reporting.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card soft-shadow">
+      <h3>Why this is a Governance product</h3>
+      <ul class="check-list">
+        <li>Standardizes maintenance reporting process</li>
+        <li>Improves data integrity and comparability</li>
+        <li>Creates clear review accountability</li>
+        <li>Supports better risk-based decisions</li>
+        <li>Provides traceable audit history</li>
+      </ul>
+      <div class="summary-note">
+        Built for logistics teams, internal operations, warehouse management, fleet maintenance, and enterprise asset governance scenarios.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="dashboard">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Product Demo</div>
+      <h2>A dashboard that looks simple, but solves a serious operational problem.</h2>
+      <p>The experience is intentionally calm, readable, and practical. Buttons are obvious. Numbers are large. Alerts are meaningful. Users know what to do next without guessing.</p>
+    </div>
+
+    <div class="kpi-grid">
+      <article class="kpi-card soft-shadow">
+        <span class="kpi-label">Maintenance Tickets</span>
+        <strong class="kpi-value">1,284</strong>
+        <span class="kpi-sub">This month</span>
+      </article>
+      <article class="kpi-card soft-shadow success">
+        <span class="kpi-label">Validation Success Rate</span>
+        <strong class="kpi-value">94%</strong>
+        <span class="kpi-sub">+12% vs previous month</span>
+      </article>
+      <article class="kpi-card soft-shadow warning">
+        <span class="kpi-label">Pending Review Queue</span>
+        <strong class="kpi-value">27</strong>
+        <span class="kpi-sub">Requires supervisor action</span>
+      </article>
+      <article class="kpi-card soft-shadow info">
+        <span class="kpi-label">High-risk Assets</span>
+        <strong class="kpi-value">8</strong>
+        <span class="kpi-sub">Prioritized for attention</span>
+      </article>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="card soft-shadow form-card">
+        <div class="card-head">
+          <div>
+            <h3>New Maintenance Submission</h3>
+            <p>Structured form with live data checks</p>
+          </div>
+          <span class="status-pill status-live">AI Validation Active</span>
+        </div>
+
+        <form class="maintenance-form" onsubmit="return false;">
+          <div class="form-grid">
+            <label>
+              <span>Asset ID</span>
+              <input type="text" value="TRK-PLT-204" readonly>
+            </label>
+            <label>
+              <span>Location</span>
+              <input type="text" value="Warehouse Bekasi 2" readonly>
+            </label>
+            <label>
+              <span>Maintenance Type</span>
+              <select disabled>
+                <option selected>Preventive Maintenance</option>
+              </select>
+            </label>
+            <label>
+              <span>Date</span>
+              <input type="text" value="14 April 2026" readonly>
+            </label>
+            <label>
+              <span>Assigned Technician</span>
+              <input type="text" value="Budi Santoso" readonly>
+            </label>
+            <label>
+              <span>Workflow Status</span>
+              <select disabled>
+                <option selected>Waiting for Approval</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="full-width">
+            <span>Maintenance Note</span>
+            <textarea rows="4" readonly>Inspection on conveyor line 3. Mild abnormal vibration detected. System suggests follow-up bearing inspection within the next 24 hours.</textarea>
+          </label>
+
+          <div class="validation-box">
+            <div class="validation-item ok">✓ Asset matched with master registry</div>
+            <div class="validation-item ok">✓ Date and format comply with policy</div>
+            <div class="validation-item warn">⚠ Similar issue pattern detected in recent maintenance history</div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-primary">Save Record</button>
+            <button class="btn-secondary">Send to Reviewer</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="dashboard-side">
+        <div class="card soft-shadow review-card">
+          <div class="card-head">
+            <div>
+              <h3>Priority Review Queue</h3>
+              <p>Entries requiring decision</p>
+            </div>
+          </div>
+          <div class="review-list">
+            <div class="review-item critical">
+              <div>
+                <strong>Forklift FL-12</strong>
+                <p>Current location does not match last approved record</p>
+              </div>
+              <span>High</span>
+            </div>
+            <div class="review-item medium">
+              <div>
+                <strong>Conveyor CV-08</strong>
+                <p>Possible duplicate ticket submitted within 2 hours</p>
+              </div>
+              <span>Medium</span>
+            </div>
+            <div class="review-item low">
+              <div>
+                <strong>Truck TR-77</strong>
+                <p>Maintenance note too short and missing key detail</p>
+              </div>
+              <span>Low</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card soft-shadow chart-card">
+          <div class="card-head">
+            <div>
+              <h3>Weekly Data Quality Score</h3>
+              <p>Simulation of 7-day performance</p>
+            </div>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span>Mon</span><div class="bar"><i style="width:82%"></i></div><b>82%</b></div>
+            <div class="bar-row"><span>Tue</span><div class="bar"><i style="width:88%"></i></div><b>88%</b></div>
+            <div class="bar-row"><span>Wed</span><div class="bar"><i style="width:84%"></i></div><b>84%</b></div>
+            <div class="bar-row"><span>Thu</span><div class="bar"><i style="width:91%"></i></div><b>91%</b></div>
+            <div class="bar-row"><span>Fri</span><div class="bar"><i style="width:94%"></i></div><b>94%</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="impact">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Business Impact</div>
+      <h2>This is not just a dashboard. It changes how maintenance decisions are made.</h2>
+      <p>When input quality improves, maintenance planning becomes more reliable. That means fewer wrong assumptions, fewer wasted reviews, and faster response to asset risk.</p>
+    </div>
+
+    <div class="impact-grid">
+      <article class="impact-card soft-shadow">
+        <h3>Operational Efficiency</h3>
+        <p>Reduce manual back-and-forth between admin, supervisor, and manager by standardizing the first entry point.</p>
+      </article>
+      <article class="impact-card soft-shadow">
+        <h3>Data Integrity</h3>
+        <p>Improve consistency of naming, asset references, issue categories, and approval-ready records.</p>
+      </article>
+      <article class="impact-card soft-shadow">
+        <h3>Governance Visibility</h3>
+        <p>Track review actions, revisions, and approvals with clear ownership and timestamped history.</p>
+      </article>
+      <article class="impact-card soft-shadow">
+        <h3>Risk Reduction</h3>
+        <p>Catch suspicious records early so the organization can prioritize the right assets before downtime escalates.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="audit">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Audit Trail</div>
+      <h2>Every action remains visible, accountable, and reviewable.</h2>
+      <p>For governance use cases, this matters. Each update captures the timeline, actor, status, and rationale behind every record movement.</p>
+    </div>
+
+    <div class="table-card soft-shadow">
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Asset</th>
+            <th>Action</th>
+            <th>User</th>
+            <th>Status</th>
+            <th>Reason / Note</th>
+          </tr>
+        </thead>
+        <tbody id="auditRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-section">
+  <div class="container cta-box soft-shadow">
+    <div>
+      <div class="eyebrow">Closing Pitch</div>
+      <h2>GovernanceFlow turns maintenance logs into reliable governance data.</h2>
+      <p>Simple enough for daily operations. Strong enough for managerial control. Useful enough for real deployment after the hackathon.</p>
+    </div>
+    <a href="#home" class="btn-primary">Back to Top</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <strong>GovernanceFlow</strong>
+      <p>Hackathon prototype · Governance category</p>
+    </div>
+    <div class="footer-links">
+      <a href="#problem">Problem</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#impact">Impact</a>
+      <a href="#audit">Audit</a>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
