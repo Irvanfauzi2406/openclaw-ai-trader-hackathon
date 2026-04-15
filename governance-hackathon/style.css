@@ -563,6 +563,28 @@ textarea {
   border: 1px dashed var(--line);
 }
 
+.demo-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
+}
+
+.demo-toolbar p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.demo-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .kpi-grid {
   grid-template-columns: repeat(4, 1fr);
   margin-bottom: 20px;
@@ -945,6 +967,7 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .demo-toolbar,
   .cta-box,
   .footer-inner {
     flex-direction: column;

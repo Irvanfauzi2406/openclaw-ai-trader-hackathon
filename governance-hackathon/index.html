@@ -202,25 +202,37 @@
       <p>The experience is intentionally calm, readable, and practical. Buttons are obvious. Numbers are large. Alerts are meaningful. Users know what to do next without guessing.</p>
     </div>
 
+    <div class="demo-toolbar soft-shadow">
+      <div>
+        <strong>Interactive Demo Controls</strong>
+        <p>Gunakan tombol ini saat presentasi untuk mensimulasikan perubahan data.</p>
+      </div>
+      <div class="demo-actions">
+        <button class="btn-secondary" id="simulateClean">Simulate Clean Record</button>
+        <button class="btn-secondary" id="simulateRisk">Simulate Risk Flag</button>
+        <button class="btn-primary" id="simulateApprove">Simulate Approval</button>
+      </div>
+    </div>
+
     <div class="kpi-grid">
       <article class="kpi-card soft-shadow">
         <span class="kpi-label">Maintenance Tickets</span>
-        <strong class="kpi-value">1,284</strong>
+        <strong class="kpi-value" id="kpiTickets">1,284</strong>
         <span class="kpi-sub">This month</span>
       </article>
       <article class="kpi-card soft-shadow success">
         <span class="kpi-label">Validation Success Rate</span>
-        <strong class="kpi-value">94%</strong>
+        <strong class="kpi-value" id="kpiValidation">94%</strong>
         <span class="kpi-sub">+12% vs previous month</span>
       </article>
       <article class="kpi-card soft-shadow warning">
         <span class="kpi-label">Pending Review Queue</span>
-        <strong class="kpi-value">27</strong>
+        <strong class="kpi-value" id="kpiReview">27</strong>
         <span class="kpi-sub">Requires supervisor action</span>
       </article>
       <article class="kpi-card soft-shadow info">
         <span class="kpi-label">High-risk Assets</span>
-        <strong class="kpi-value">8</strong>
+        <strong class="kpi-value" id="kpiRisk">8</strong>
         <span class="kpi-sub">Prioritized for attention</span>
       </article>
     </div>
@@ -293,7 +305,7 @@
               <p>Entries requiring decision</p>
             </div>
           </div>
-          <div class="review-list">
+          <div class="review-list" id="reviewList">
             <div class="review-item critical">
               <div>
                 <strong>Forklift FL-12</strong>
