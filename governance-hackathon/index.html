@@ -77,19 +77,19 @@
           <div class="mini-kpi-row">
             <div class="mini-kpi success">
               <small>Validated Tickets</small>
-              <strong>148</strong>
+              <strong id="miniValidated">148</strong>
             </div>
             <div class="mini-kpi warning">
               <small>Need Review</small>
-              <strong>12</strong>
+              <strong id="miniNeedReview">12</strong>
             </div>
           </div>
           <div class="mini-form-card">
             <div class="mini-form-title">Real-time Validation Snapshot</div>
-            <div class="fake-input">Asset ID: <b>TRK-PLT-204</b></div>
-            <div class="fake-input">Location: <b>Warehouse Bekasi 2</b></div>
-            <div class="fake-input">Maintenance Type: <b>Preventive</b></div>
-            <div class="fake-alert">✓ Asset verified · ✓ Format valid · ⚠ Similar issue found 6 days ago</div>
+            <div class="fake-input">Asset ID: <b id="snapshotAsset">TRK-PLT-204</b></div>
+            <div class="fake-input">Location: <b id="snapshotLocation">Warehouse Bekasi 2</b></div>
+            <div class="fake-input">Maintenance Type: <b id="snapshotType">Preventive</b></div>
+            <div class="fake-alert" id="snapshotAlert">✓ Asset verified · ✓ Format valid · ⚠ Similar issue found 6 days ago</div>
           </div>
           <div class="mini-list">
             <div class="mini-list-item">
@@ -205,12 +205,12 @@
     <div class="demo-toolbar soft-shadow">
       <div>
         <strong>Interactive Demo Controls</strong>
-        <p>Gunakan tombol ini saat presentasi untuk mensimulasikan perubahan data.</p>
+        <p>Gunakan tombol ini saat presentasi untuk mensimulasikan perubahan data atau gunakan form nyata di bawah.</p>
       </div>
       <div class="demo-actions">
-        <button class="btn-secondary" id="simulateClean">Simulate Clean Record</button>
-        <button class="btn-secondary" id="simulateRisk">Simulate Risk Flag</button>
-        <button class="btn-primary" id="simulateApprove">Simulate Approval</button>
+        <button class="btn-secondary" id="simulateClean" type="button">Simulate Clean Record</button>
+        <button class="btn-secondary" id="simulateRisk" type="button">Simulate Risk Flag</button>
+        <button class="btn-primary" id="simulateApprove" type="button">Simulate Approval</button>
       </div>
     </div>
 
@@ -242,57 +242,64 @@
         <div class="card-head">
           <div>
             <h3>New Maintenance Submission</h3>
-            <p>Structured form with live data checks</p>
+            <p>Structured form with live validation and local persistence</p>
           </div>
-          <span class="status-pill status-live">AI Validation Active</span>
+          <span class="status-pill status-live" id="formStatusPill">Ready to Input</span>
         </div>
 
-        <form class="maintenance-form" onsubmit="return false;">
+        <form class="maintenance-form" id="maintenanceForm">
           <div class="form-grid">
             <label>
               <span>Asset ID</span>
-              <input type="text" value="TRK-PLT-204" readonly>
+              <input type="text" id="assetId" placeholder="Contoh: TRK-PLT-204" required>
             </label>
             <label>
               <span>Location</span>
-              <input type="text" value="Warehouse Bekasi 2" readonly>
+              <input type="text" id="location" placeholder="Contoh: Warehouse Bekasi 2" required>
             </label>
             <label>
               <span>Maintenance Type</span>
-              <select disabled>
-                <option selected>Preventive Maintenance</option>
+              <select id="maintenanceType" required>
+                <option value="">Pilih jenis maintenance</option>
+                <option>Preventive Maintenance</option>
+                <option>Corrective Maintenance</option>
+                <option>Inspection</option>
+                <option>Emergency Repair</option>
               </select>
             </label>
             <label>
               <span>Date</span>
-              <input type="text" value="14 April 2026" readonly>
+              <input type="date" id="maintenanceDate" required>
             </label>
             <label>
               <span>Assigned Technician</span>
-              <input type="text" value="Budi Santoso" readonly>
+              <input type="text" id="technician" placeholder="Nama teknisi" required>
             </label>
             <label>
               <span>Workflow Status</span>
-              <select disabled>
-                <option selected>Waiting for Approval</option>
+              <select id="workflowStatus" required>
+                <option value="Draft">Draft</option>
+                <option value="Waiting for Approval" selected>Waiting for Approval</option>
+                <option value="Under Review">Under Review</option>
               </select>
             </label>
           </div>
 
           <label class="full-width">
             <span>Maintenance Note</span>
-            <textarea rows="4" readonly>Inspection on conveyor line 3. Mild abnormal vibration detected. System suggests follow-up bearing inspection within the next 24 hours.</textarea>
+            <textarea rows="4" id="maintenanceNote" placeholder="Tuliskan detail issue, kondisi aset, atau rekomendasi tindak lanjut" required></textarea>
           </label>
 
-          <div class="validation-box">
-            <div class="validation-item ok">✓ Asset matched with master registry</div>
-            <div class="validation-item ok">✓ Date and format comply with policy</div>
-            <div class="validation-item warn">⚠ Similar issue pattern detected in recent maintenance history</div>
+          <div class="validation-box" id="validationBox">
+            <div class="validation-item">Isi form untuk melihat hasil validasi.</div>
           </div>
 
+          <div class="form-feedback" id="formFeedback"></div>
+
           <div class="form-actions">
-            <button class="btn-primary">Save Record</button>
-            <button class="btn-secondary">Send to Reviewer</button>
+            <button class="btn-primary" id="saveRecord" type="submit">Save Record</button>
+            <button class="btn-secondary" id="sendReviewer" type="button">Send to Reviewer</button>
+            <button class="btn-secondary" id="resetForm" type="button">Reset Form</button>
           </div>
         </form>
       </div>
@@ -305,29 +312,7 @@
               <p>Entries requiring decision</p>
             </div>
           </div>
-          <div class="review-list" id="reviewList">
-            <div class="review-item critical">
-              <div>
-                <strong>Forklift FL-12</strong>
-                <p>Current location does not match last approved record</p>
-              </div>
-              <span>High</span>
-            </div>
-            <div class="review-item medium">
-              <div>
-                <strong>Conveyor CV-08</strong>
-                <p>Possible duplicate ticket submitted within 2 hours</p>
-              </div>
-              <span>Medium</span>
-            </div>
-            <div class="review-item low">
-              <div>
-                <strong>Truck TR-77</strong>
-                <p>Maintenance note too short and missing key detail</p>
-              </div>
-              <span>Low</span>
-            </div>
-          </div>
+          <div class="review-list" id="reviewList"></div>
         </div>
 
         <div class="card soft-shadow chart-card">
