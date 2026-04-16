@@ -30,11 +30,7 @@
     <li><a href="#problem">Masalah</a></li>
     <li><a href="#solution">Solusi</a></li>
     <li><a href="#menu-platform">Menu Platform</a></li>
-    <li><a href="#halaman-form">Input Form</a></li>
-    <li><a href="#dashboard">Dashboard</a></li>
-    <li><a href="#records">Data Tersimpan</a></li>
     <li><a href="#impact">Dampak</a></li>
-    <li><a href="#audit">Audit</a></li>
   </ul>
 
   <a href="#menu-platform" class="nav-cta">Masuk Platform</a>
@@ -202,7 +198,7 @@
     <div class="section-head center">
       <div class="eyebrow">Menu Platform</div>
       <h2>Pilih halaman kerja sesuai kebutuhan pengguna.</h2>
-      <p>Supaya alurnya lebih realistis, platform ini sekarang punya menu khusus. User bisa masuk ke halaman input form untuk membuat data baru, atau langsung ke dashboard untuk monitoring dan review.</p>
+      <p>Supaya alurnya lebih realistis, platform ini sekarang punya pemisahan halaman. User bisa masuk ke halaman input form untuk membuat data baru, atau langsung ke dashboard untuk monitoring dan review.</p>
     </div>
 
     <div class="menu-grid">
@@ -210,244 +206,14 @@
         <div class="menu-icon">📝</div>
         <h3>Halaman Input Maintenance</h3>
         <p>Gunakan halaman ini saat admin atau teknisi ingin mengisi form maintenance baru dengan alur yang lebih fokus.</p>
-        <a href="#halaman-form" class="btn-primary">Buka Halaman Form</a>
+        <a href="form.html" class="btn-primary">Buka Halaman Form</a>
       </article>
       <article class="menu-card soft-shadow">
         <div class="menu-icon">📊</div>
         <h3>Dashboard Monitoring</h3>
         <p>Gunakan dashboard untuk melihat KPI, review queue, data tersimpan, dan audit trail setelah data mulai masuk.</p>
-        <a href="#dashboard" class="btn-secondary">Buka Dashboard</a>
+        <a href="dashboard.html" class="btn-secondary">Buka Dashboard</a>
       </article>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="halaman-form">
-  <div class="container">
-    <div class="section-head center">
-      <div class="eyebrow">Halaman Input Form</div>
-      <h2>Halaman khusus untuk mengisi data maintenance.</h2>
-      <p>Halaman ini dibuat khusus agar user fokus menginput data lebih dulu, tanpa terdistraksi dashboard. Cocok untuk admin operasional dan teknisi lapangan.</p>
-    </div>
-
-    <div class="form-page-layout">
-      <div class="card soft-shadow form-page-card">
-        <div class="card-head">
-          <div>
-            <h3>Form Pengajuan Maintenance</h3>
-            <p>Isi seluruh field wajib sebelum data disimpan atau dikirim ke reviewer</p>
-          </div>
-          <span class="status-pill status-live" id="formStatusPill">Siap Diisi</span>
-        </div>
-
-        <form class="maintenance-form" id="maintenanceForm">
-          <div class="form-grid">
-            <label>
-              <span>ID Aset</span>
-              <input type="text" id="assetId" placeholder="Contoh: TRK-PLT-204" required>
-            </label>
-            <label>
-              <span>Lokasi</span>
-              <input type="text" id="location" placeholder="Contoh: Warehouse Bekasi 2" required>
-            </label>
-            <label>
-              <span>Jenis Maintenance</span>
-              <select id="maintenanceType" required>
-                <option value="">Pilih jenis maintenance</option>
-                <option>Preventive Maintenance</option>
-                <option>Corrective Maintenance</option>
-                <option>Inspection</option>
-                <option>Emergency Repair</option>
-              </select>
-            </label>
-            <label>
-              <span>Tanggal</span>
-              <input type="date" id="maintenanceDate" required>
-            </label>
-            <label>
-              <span>Teknisi Penanggung Jawab</span>
-              <input type="text" id="technician" placeholder="Nama teknisi" required>
-            </label>
-            <label>
-              <span>Status Alur Kerja</span>
-              <select id="workflowStatus" required>
-                <option value="Draft">Draft</option>
-                <option value="Menunggu Approval" selected>Menunggu Approval</option>
-                <option value="Sedang Direview">Sedang Direview</option>
-              </select>
-            </label>
-          </div>
-
-          <label class="full-width">
-            <span>Catatan Maintenance</span>
-            <textarea rows="4" id="maintenanceNote" placeholder="Tuliskan detail issue, kondisi aset, atau rekomendasi tindak lanjut" required></textarea>
-          </label>
-
-          <div class="validation-box" id="validationBox">
-            <div class="validation-item">Isi form untuk melihat hasil validasi.</div>
-          </div>
-
-          <div class="form-feedback" id="formFeedback"></div>
-
-          <div class="form-actions">
-            <button class="btn-primary" id="saveRecord" type="submit">Simpan Data</button>
-            <button class="btn-secondary" id="sendReviewer" type="button">Kirim ke Reviewer</button>
-            <button class="btn-secondary" id="resetForm" type="button">Reset Form</button>
-          </div>
-        </form>
-
-        <div class="form-shortcuts">
-          <a href="#dashboard" class="btn-secondary">Lihat Dashboard</a>
-          <a href="#records" class="btn-secondary">Lihat Data Tersimpan</a>
-        </div>
-
-        <div class="form-page-note">
-          Setelah data diisi di sini, hasilnya akan langsung masuk ke dashboard, data tersimpan, review queue, dan audit trail.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="dashboard">
-  <div class="container">
-    <div class="section-head center">
-      <div class="eyebrow">Demo Produk</div>
-      <h2>Dashboard yang sederhana, tapi menyelesaikan masalah operasional yang serius.</h2>
-      <p>Pengalamannya sengaja dibuat tenang, mudah dibaca, dan praktis. Tombol jelas. Angka besar. Alert bermakna. Pengguna tahu apa langkah berikutnya tanpa perlu menebak.</p>
-    </div>
-
-    <div class="demo-toolbar soft-shadow">
-      <div>
-        <strong>Kontrol Demo Interaktif</strong>
-        <p>Gunakan tombol ini saat presentasi untuk mensimulasikan perubahan data atau gunakan form nyata di bawah.</p>
-      </div>
-      <div class="demo-actions">
-        <button class="btn-secondary" id="simulateClean" type="button">Simulasi Data Bersih</button>
-        <button class="btn-secondary" id="simulateRisk" type="button">Simulasi Data Berisiko</button>
-        <button class="btn-primary" id="simulateApprove" type="button">Simulasi Approval</button>
-      </div>
-    </div>
-
-    <div class="kpi-grid">
-      <article class="kpi-card soft-shadow">
-        <span class="kpi-label">Total Tiket Maintenance</span>
-        <strong class="kpi-value" id="kpiTickets">1,284</strong>
-        <span class="kpi-sub">Bulan ini</span>
-      </article>
-      <article class="kpi-card soft-shadow success">
-        <span class="kpi-label">Tingkat Validasi Berhasil</span>
-        <strong class="kpi-value" id="kpiValidation">94%</strong>
-        <span class="kpi-sub">Naik 12% dari bulan lalu</span>
-      </article>
-      <article class="kpi-card soft-shadow warning">
-        <span class="kpi-label">Antrian Review</span>
-        <strong class="kpi-value" id="kpiReview">27</strong>
-        <span class="kpi-sub">Butuh tindakan supervisor</span>
-      </article>
-      <article class="kpi-card soft-shadow info">
-        <span class="kpi-label">Aset Berisiko Tinggi</span>
-        <strong class="kpi-value" id="kpiRisk">8</strong>
-        <span class="kpi-sub">Diprioritaskan untuk ditangani</span>
-      </article>
-    </div>
-
-    <div class="dashboard-grid dashboard-monitor-only">
-      <div class="dashboard-side dashboard-side-full">
-        <div class="card soft-shadow review-card">
-          <div class="card-head">
-            <div>
-              <h3>Antrian Review Prioritas</h3>
-              <p>Data yang membutuhkan keputusan</p>
-            </div>
-          </div>
-          <div class="review-list" id="reviewList"></div>
-        </div>
-
-        <div class="card soft-shadow chart-card">
-          <div class="card-head">
-            <div>
-              <h3>Skor Kualitas Data Mingguan</h3>
-              <p>Simulasi performa 7 hari terakhir</p>
-            </div>
-          </div>
-          <div class="bars">
-            <div class="bar-row"><span>Sen</span><div class="bar"><i style="width:82%"></i></div><b>82%</b></div>
-            <div class="bar-row"><span>Sel</span><div class="bar"><i style="width:88%"></i></div><b>88%</b></div>
-            <div class="bar-row"><span>Rab</span><div class="bar"><i style="width:84%"></i></div><b>84%</b></div>
-            <div class="bar-row"><span>Kam</span><div class="bar"><i style="width:91%"></i></div><b>91%</b></div>
-            <div class="bar-row"><span>Jum</span><div class="bar"><i style="width:94%"></i></div><b>94%</b></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section-alt" id="records">
-  <div class="container">
-    <div class="section-head center">
-      <div class="eyebrow">Data Tersimpan</div>
-      <h2>Semua record yang sudah masuk bisa dilihat dan difilter.</h2>
-      <p>Bagian ini membantu supervisor dan manajer memeriksa data yang sudah disimpan berdasarkan status, tanpa harus membaca audit trail satu per satu.</p>
-    </div>
-
-    <div class="records-summary-grid">
-      <article class="summary-mini-card soft-shadow">
-        <span>Total Record</span>
-        <strong id="summaryTotalRecords">0</strong>
-      </article>
-      <article class="summary-mini-card soft-shadow success">
-        <span>Valid</span>
-        <strong id="summaryValidRecords">0</strong>
-      </article>
-      <article class="summary-mini-card soft-shadow warning">
-        <span>Warning</span>
-        <strong id="summaryWarningRecords">0</strong>
-      </article>
-      <article class="summary-mini-card soft-shadow info">
-        <span>Approved</span>
-        <strong id="summaryApprovedRecords">0</strong>
-      </article>
-    </div>
-
-    <div class="records-toolbar soft-shadow">
-      <div>
-        <strong>Filter, Export, dan Reset Demo</strong>
-        <p>Cari berdasarkan ID aset, filter status, export data yang sedang tampil, atau reset seluruh data lokal sebelum presentasi.</p>
-      </div>
-      <div class="records-filter-group">
-        <label class="filter-label" for="assetSearch">Cari ID Aset</label>
-        <input type="text" id="assetSearch" class="status-filter" placeholder="Contoh: TRK-PLT-204">
-        <label class="filter-label" for="statusFilter">Status</label>
-        <select id="statusFilter" class="status-filter">
-          <option value="Semua">Semua</option>
-          <option value="Valid">Valid</option>
-          <option value="Menunggu Review">Menunggu Review</option>
-          <option value="Warning">Warning</option>
-          <option value="Approved">Approved</option>
-          <option value="Revised">Revised</option>
-        </select>
-        <button type="button" class="btn-primary" id="exportCsv">Export CSV</button>
-        <button type="button" class="btn-secondary" id="clearLocalData">Clear Local Data</button>
-      </div>
-    </div>
-
-    <div class="table-card soft-shadow">
-      <table class="audit-table">
-        <thead>
-          <tr>
-            <th>ID Aset</th>
-            <th>Lokasi</th>
-            <th>Jenis</th>
-            <th>Tanggal</th>
-            <th>Teknisi</th>
-            <th>Status</th>
-            <th>Catatan</th>
-          </tr>
-        </thead>
-        <tbody id="recordsRows"></tbody>
-      </table>
     </div>
   </div>
 </section>
@@ -480,58 +246,6 @@
     </div>
   </div>
 </section>
-
-<section class="section" id="audit">
-  <div class="container">
-    <div class="section-head center">
-      <div class="eyebrow">Audit Trail</div>
-      <h2>Setiap aksi tetap terlihat, akuntabel, dan bisa direview.</h2>
-      <p>Untuk use case governance, ini penting. Setiap update menangkap timeline, pelaku, status, dan alasan di balik perpindahan data.</p>
-    </div>
-
-    <div class="table-card soft-shadow">
-      <table class="audit-table">
-        <thead>
-          <tr>
-            <th>Waktu</th>
-            <th>Aset</th>
-            <th>Aksi</th>
-            <th>Pengguna</th>
-            <th>Status</th>
-            <th>Alasan / Catatan</th>
-          </tr>
-        </thead>
-        <tbody id="auditRows"></tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section class="section cta-section">
-  <div class="container cta-box soft-shadow">
-    <div>
-      <div class="eyebrow">Penutup</div>
-      <h2>GovernanceFlow mengubah log maintenance menjadi data governance yang bisa dipercaya.</h2>
-      <p>Sederhana untuk operasional harian. Kuat untuk kontrol manajerial. Cukup berguna untuk dikembangkan jadi sistem nyata setelah hackathon.</p>
-    </div>
-    <a href="#home" class="btn-primary">Kembali ke Atas</a>
-  </div>
-</section>
-
-<footer>
-  <div class="container footer-inner">
-    <div>
-      <strong>GovernanceFlow</strong>
-      <p>Prototype hackathon · kategori Governance</p>
-    </div>
-    <div class="footer-links">
-      <a href="#problem">Masalah</a>
-      <a href="#dashboard">Dashboard</a>
-      <a href="#records">Data</a>
-      <a href="#audit">Audit</a>
-    </div>
-  </div>
-</footer>
 
 <script src="main.js"></script>
 </body>

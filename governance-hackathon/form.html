@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GovernanceFlow — Halaman input maintenance untuk pengisian data operasional secara terstruktur.">
+<meta name="theme-color" content="#f6f8fc">
+<title>GovernanceFlow — Input Maintenance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="logo-mark">G</div>
+    <div class="logo-text">
+      <strong>GovernanceFlow</strong>
+      <span>Halaman Input Maintenance</span>
+    </div>
+  </div>
+
+  <button class="nav-hamburger" id="hamburger" aria-label="Buka menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Landing</a></li>
+    <li><a href="form.html">Input Form</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+  </ul>
+
+  <a href="dashboard.html" class="nav-cta">Lihat Dashboard</a>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Halaman Input Form</div>
+      <h2>Isi data maintenance di halaman khusus input.</h2>
+      <p>Halaman ini dibuat agar admin dan teknisi fokus menginput data terlebih dahulu, tanpa terdistraksi dashboard monitoring.</p>
+    </div>
+
+    <div class="form-page-layout">
+      <div class="card soft-shadow form-page-card">
+        <div class="card-head">
+          <div>
+            <h3>Form Pengajuan Maintenance</h3>
+            <p>Isi seluruh field wajib sebelum data disimpan atau dikirim ke reviewer</p>
+          </div>
+          <span class="status-pill status-live" id="formStatusPill">Siap Diisi</span>
+        </div>
+
+        <form class="maintenance-form" id="maintenanceForm">
+          <div class="form-grid">
+            <label>
+              <span>ID Aset</span>
+              <input type="text" id="assetId" placeholder="Contoh: TRK-PLT-204" required>
+            </label>
+            <label>
+              <span>Lokasi</span>
+              <input type="text" id="location" placeholder="Contoh: Warehouse Bekasi 2" required>
+            </label>
+            <label>
+              <span>Jenis Maintenance</span>
+              <select id="maintenanceType" required>
+                <option value="">Pilih jenis maintenance</option>
+                <option>Preventive Maintenance</option>
+                <option>Corrective Maintenance</option>
+                <option>Inspection</option>
+                <option>Emergency Repair</option>
+              </select>
+            </label>
+            <label>
+              <span>Tanggal</span>
+              <input type="date" id="maintenanceDate" required>
+            </label>
+            <label>
+              <span>Teknisi Penanggung Jawab</span>
+              <input type="text" id="technician" placeholder="Nama teknisi" required>
+            </label>
+            <label>
+              <span>Status Alur Kerja</span>
+              <select id="workflowStatus" required>
+                <option value="Draft">Draft</option>
+                <option value="Menunggu Approval" selected>Menunggu Approval</option>
+                <option value="Sedang Direview">Sedang Direview</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="full-width">
+            <span>Catatan Maintenance</span>
+            <textarea rows="4" id="maintenanceNote" placeholder="Tuliskan detail issue, kondisi aset, atau rekomendasi tindak lanjut" required></textarea>
+          </label>
+
+          <div class="validation-box" id="validationBox">
+            <div class="validation-item">Isi form untuk melihat hasil validasi.</div>
+          </div>
+
+          <div class="form-feedback" id="formFeedback"></div>
+
+          <div class="form-actions">
+            <button class="btn-primary" id="saveRecord" type="submit">Simpan Data</button>
+            <button class="btn-secondary" id="sendReviewer" type="button">Kirim ke Reviewer</button>
+            <button class="btn-secondary" id="resetForm" type="button">Reset Form</button>
+          </div>
+        </form>
+
+        <div class="form-shortcuts">
+          <a href="dashboard.html" class="btn-secondary">Lihat Dashboard</a>
+          <a href="dashboard.html#records" class="btn-secondary">Lihat Data Tersimpan</a>
+        </div>
+
+        <div class="form-page-note">
+          Setelah data diisi di sini, hasilnya akan langsung masuk ke dashboard monitoring, data tersimpan, review queue, dan audit trail.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="main.js"></script>
+</body>
+</html>

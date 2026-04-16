@@ -679,7 +679,7 @@ els.reviewList?.addEventListener('click', (event) => {
 bindFormEvents();
 bindDemoButtons();
 persistAndRender();
-renderValidation([]);
+if (els.validationBox) renderValidation([]);
 updateSnapshot({}, []);
 
 const revealItems = document.querySelectorAll('.issue-card, .kpi-card, .card, .table-card, .summary-card, .impact-card, .demo-toolbar, .records-toolbar, .summary-mini-card');
