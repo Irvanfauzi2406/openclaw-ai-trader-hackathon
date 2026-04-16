@@ -344,10 +344,29 @@
       <p>Bagian ini membantu supervisor dan manajer memeriksa data yang sudah disimpan berdasarkan status, tanpa harus membaca audit trail satu per satu.</p>
     </div>
 
+    <div class="records-summary-grid">
+      <article class="summary-mini-card soft-shadow">
+        <span>Total Record</span>
+        <strong id="summaryTotalRecords">0</strong>
+      </article>
+      <article class="summary-mini-card soft-shadow success">
+        <span>Valid</span>
+        <strong id="summaryValidRecords">0</strong>
+      </article>
+      <article class="summary-mini-card soft-shadow warning">
+        <span>Warning</span>
+        <strong id="summaryWarningRecords">0</strong>
+      </article>
+      <article class="summary-mini-card soft-shadow info">
+        <span>Approved</span>
+        <strong id="summaryApprovedRecords">0</strong>
+      </article>
+    </div>
+
     <div class="records-toolbar soft-shadow">
       <div>
-        <strong>Filter dan Export Data</strong>
-        <p>Cari berdasarkan ID aset, filter status, lalu export data yang sedang tampil ke CSV.</p>
+        <strong>Filter, Export, dan Reset Demo</strong>
+        <p>Cari berdasarkan ID aset, filter status, export data yang sedang tampil, atau reset seluruh data lokal sebelum presentasi.</p>
       </div>
       <div class="records-filter-group">
         <label class="filter-label" for="assetSearch">Cari ID Aset</label>
@@ -362,6 +381,7 @@
           <option value="Revised">Revised</option>
         </select>
         <button type="button" class="btn-primary" id="exportCsv">Export CSV</button>
+        <button type="button" class="btn-secondary" id="clearLocalData">Clear Local Data</button>
       </div>
     </div>
 

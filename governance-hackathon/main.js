@@ -115,7 +115,7 @@ function loadState() {
   }
 }
 
-const state = loadState();
+let state = loadState();
 
 const els = {
   kpiTickets: document.getElementById('kpiTickets'),
@@ -130,6 +130,11 @@ const els = {
   statusFilter: document.getElementById('statusFilter'),
   assetSearch: document.getElementById('assetSearch'),
   exportCsv: document.getElementById('exportCsv'),
+  clearLocalData: document.getElementById('clearLocalData'),
+  summaryTotalRecords: document.getElementById('summaryTotalRecords'),
+  summaryValidRecords: document.getElementById('summaryValidRecords'),
+  summaryWarningRecords: document.getElementById('summaryWarningRecords'),
+  summaryApprovedRecords: document.getElementById('summaryApprovedRecords'),
   form: document.getElementById('maintenanceForm'),
   assetId: document.getElementById('assetId'),
   location: document.getElementById('location'),
@@ -285,6 +290,13 @@ function renderKpis() {
   if (els.miniNeedReview) els.miniNeedReview.textContent = state.metrics.needReviewMini;
 }
 
+function renderRecordsSummary() {
+  if (els.summaryTotalRecords) els.summaryTotalRecords.textContent = state.records.length;
+  if (els.summaryValidRecords) els.summaryValidRecords.textContent = state.records.filter(record => record.status === 'Valid').length;
+  if (els.summaryWarningRecords) els.summaryWarningRecords.textContent = state.records.filter(record => record.status === 'Warning').length;
+  if (els.summaryApprovedRecords) els.summaryApprovedRecords.textContent = state.records.filter(record => record.status === 'Approved').length;
+}
+
 function renderReviewQueue() {
   if (!els.reviewList) return;
   els.reviewList.innerHTML = '';
@@ -415,6 +427,7 @@ function prependAuditRow(row) {
 function persistAndRender() {
   saveState();
   renderKpis();
+  renderRecordsSummary();
   renderReviewQueue();
   renderRecordsTable();
   renderAuditTable();
@@ -497,6 +510,16 @@ function resetFormState() {
   updateSnapshot({}, []);
   setFeedback('');
   updateFormPill('Siap Diisi');
+}
+
+function clearLocalDemoData() {
+  localStorage.removeItem(STORAGE_KEY);
+  state = cloneDefaultState();
+  if (els.statusFilter) els.statusFilter.value = 'Semua';
+  if (els.assetSearch) els.assetSearch.value = '';
+  resetFormState();
+  persistAndRender();
+  setFeedback('Seluruh data lokal berhasil dibersihkan. Demo kembali ke kondisi awal.', 'success');
 }
 
 function processQueueAction(action, id) {
@@ -605,6 +628,10 @@ function bindFormEvents() {
   els.exportCsv?.addEventListener('click', () => {
     exportRecordsToCsv();
   });
+
+  els.clearLocalData?.addEventListener('click', () => {
+    clearLocalDemoData();
+  });
 }
 
 function bindDemoButtons() {
@@ -655,7 +682,7 @@ persistAndRender();
 renderValidation([]);
 updateSnapshot({}, []);
 
-const revealItems = document.querySelectorAll('.issue-card, .kpi-card, .card, .table-card, .summary-card, .impact-card, .demo-toolbar, .records-toolbar');
+const revealItems = document.querySelectorAll('.issue-card, .kpi-card, .card, .table-card, .summary-card, .impact-card, .demo-toolbar, .records-toolbar, .summary-mini-card');
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {

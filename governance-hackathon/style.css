@@ -602,6 +602,44 @@ button {
   border: 1px dashed var(--line);
 }
 
+.records-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.summary-mini-card {
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.summary-mini-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.summary-mini-card strong {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.summary-mini-card.success {
+  background: linear-gradient(180deg, #ffffff 0%, #eefaf4 100%);
+}
+
+.summary-mini-card.warning {
+  background: linear-gradient(180deg, #ffffff 0%, #fff7ea 100%);
+}
+
+.summary-mini-card.info {
+  background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+}
+
 .demo-toolbar,
 .records-toolbar {
   display: flex;
@@ -1045,7 +1083,8 @@ footer {
   .issue-grid,
   .kpi-grid,
   .workflow-grid,
-  .impact-grid {
+  .impact-grid,
+  .records-summary-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -1110,7 +1149,8 @@ footer {
   .issue-grid,
   .kpi-grid,
   .workflow-grid,
-  .impact-grid {
+  .impact-grid,
+  .records-summary-grid {
     grid-template-columns: 1fr;
   }
 
