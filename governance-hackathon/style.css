@@ -628,6 +628,10 @@ button {
   align-items: center;
 }
 
+.records-filter-group input {
+  min-width: 220px;
+}
+
 .filter-label {
   font-weight: 700;
 }

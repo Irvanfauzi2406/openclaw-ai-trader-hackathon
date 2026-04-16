@@ -346,10 +346,12 @@
 
     <div class="records-toolbar soft-shadow">
       <div>
-        <strong>Filter Data</strong>
-        <p>Pilih status untuk menampilkan record yang relevan.</p>
+        <strong>Filter dan Export Data</strong>
+        <p>Cari berdasarkan ID aset, filter status, lalu export data yang sedang tampil ke CSV.</p>
       </div>
       <div class="records-filter-group">
+        <label class="filter-label" for="assetSearch">Cari ID Aset</label>
+        <input type="text" id="assetSearch" class="status-filter" placeholder="Contoh: TRK-PLT-204">
         <label class="filter-label" for="statusFilter">Status</label>
         <select id="statusFilter" class="status-filter">
           <option value="Semua">Semua</option>
@@ -359,6 +361,7 @@
           <option value="Approved">Approved</option>
           <option value="Revised">Revised</option>
         </select>
+        <button type="button" class="btn-primary" id="exportCsv">Export CSV</button>
       </div>
     </div>
 

@@ -128,6 +128,8 @@ const els = {
   auditRows: document.getElementById('auditRows'),
   recordsRows: document.getElementById('recordsRows'),
   statusFilter: document.getElementById('statusFilter'),
+  assetSearch: document.getElementById('assetSearch'),
+  exportCsv: document.getElementById('exportCsv'),
   form: document.getElementById('maintenanceForm'),
   assetId: document.getElementById('assetId'),
   location: document.getElementById('location'),
@@ -314,17 +316,25 @@ function renderReviewQueue() {
   });
 }
 
+function getFilteredRecords() {
+  const selectedStatus = els.statusFilter?.value || 'Semua';
+  const keyword = (els.assetSearch?.value || '').trim().toLowerCase();
+
+  return state.records.filter(record => {
+    const matchesStatus = selectedStatus === 'Semua' || record.status === selectedStatus;
+    const matchesKeyword = !keyword || record.assetId.toLowerCase().includes(keyword);
+    return matchesStatus && matchesKeyword;
+  });
+}
+
 function renderRecordsTable() {
   if (!els.recordsRows) return;
-  const selectedStatus = els.statusFilter?.value || 'Semua';
-  const records = selectedStatus === 'Semua'
-    ? state.records
-    : state.records.filter(record => record.status === selectedStatus);
+  const records = getFilteredRecords();
 
   els.recordsRows.innerHTML = '';
 
   if (!records.length) {
-    els.recordsRows.innerHTML = `<tr><td colspan="7" class="empty-table">Belum ada data yang cocok dengan filter yang dipilih.</td></tr>`;
+    els.recordsRows.innerHTML = `<tr><td colspan="7" class="empty-table">Belum ada data yang cocok dengan pencarian atau filter yang dipilih.</td></tr>`;
     return;
   }
 
@@ -341,6 +351,42 @@ function renderRecordsTable() {
     `;
     els.recordsRows.appendChild(tr);
   });
+}
+
+function exportRecordsToCsv() {
+  const records = getFilteredRecords();
+
+  if (!records.length) {
+    setFeedback('Tidak ada data yang bisa diexport berdasarkan filter saat ini.', 'warn');
+    return;
+  }
+
+  const headers = ['ID Aset', 'Lokasi', 'Jenis Maintenance', 'Tanggal', 'Teknisi', 'Status', 'Catatan'];
+  const rows = records.map(record => [
+    record.assetId,
+    record.location,
+    record.maintenanceType,
+    record.maintenanceDate || '-',
+    record.technician,
+    record.status,
+    record.maintenanceNote,
+  ]);
+
+  const csvContent = [headers, ...rows]
+    .map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(','))
+    .join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'governanceflow-records.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  setFeedback('Data berhasil diexport ke CSV.', 'success');
 }
 
 function renderAuditTable() {
@@ -550,6 +596,14 @@ function bindFormEvents() {
 
   els.statusFilter?.addEventListener('change', () => {
     renderRecordsTable();
+  });
+
+  els.assetSearch?.addEventListener('input', () => {
+    renderRecordsTable();
+  });
+
+  els.exportCsv?.addEventListener('click', () => {
+    exportRecordsToCsv();
   });
 }
 
