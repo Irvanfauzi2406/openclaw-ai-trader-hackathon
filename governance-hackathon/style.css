@@ -772,6 +772,14 @@ button {
   gap: 20px;
 }
 
+.dashboard-monitor-only {
+  grid-template-columns: 1fr;
+}
+
+.dashboard-side-full {
+  grid-template-columns: 1fr 1fr;
+}
+
 .card {
   padding: 24px;
 }
@@ -1126,7 +1134,8 @@ footer {
 @media (max-width: 1080px) {
   .hero-grid,
   .split-layout,
-  .dashboard-grid {
+  .dashboard-grid,
+  .dashboard-side-full {
     grid-template-columns: 1fr;
   }
 

@@ -237,72 +237,6 @@
             <h3>Form Pengajuan Maintenance</h3>
             <p>Isi seluruh field wajib sebelum data disimpan atau dikirim ke reviewer</p>
           </div>
-          <span class="status-pill status-live">Form Operasional</span>
-        </div>
-
-        <div class="form-shortcuts">
-          <a href="#dashboard" class="btn-secondary">Lihat Dashboard</a>
-          <a href="#records" class="btn-secondary">Lihat Data Tersimpan</a>
-        </div>
-
-        <div class="form-page-note">
-          Setelah data diisi di sini, hasilnya akan langsung masuk ke dashboard, data tersimpan, review queue, dan audit trail.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="dashboard">
-  <div class="container">
-    <div class="section-head center">
-      <div class="eyebrow">Demo Produk</div>
-      <h2>Dashboard yang sederhana, tapi menyelesaikan masalah operasional yang serius.</h2>
-      <p>Pengalamannya sengaja dibuat tenang, mudah dibaca, dan praktis. Tombol jelas. Angka besar. Alert bermakna. Pengguna tahu apa langkah berikutnya tanpa perlu menebak.</p>
-    </div>
-
-    <div class="demo-toolbar soft-shadow">
-      <div>
-        <strong>Kontrol Demo Interaktif</strong>
-        <p>Gunakan tombol ini saat presentasi untuk mensimulasikan perubahan data atau gunakan form nyata di bawah.</p>
-      </div>
-      <div class="demo-actions">
-        <button class="btn-secondary" id="simulateClean" type="button">Simulasi Data Bersih</button>
-        <button class="btn-secondary" id="simulateRisk" type="button">Simulasi Data Berisiko</button>
-        <button class="btn-primary" id="simulateApprove" type="button">Simulasi Approval</button>
-      </div>
-    </div>
-
-    <div class="kpi-grid">
-      <article class="kpi-card soft-shadow">
-        <span class="kpi-label">Total Tiket Maintenance</span>
-        <strong class="kpi-value" id="kpiTickets">1,284</strong>
-        <span class="kpi-sub">Bulan ini</span>
-      </article>
-      <article class="kpi-card soft-shadow success">
-        <span class="kpi-label">Tingkat Validasi Berhasil</span>
-        <strong class="kpi-value" id="kpiValidation">94%</strong>
-        <span class="kpi-sub">Naik 12% dari bulan lalu</span>
-      </article>
-      <article class="kpi-card soft-shadow warning">
-        <span class="kpi-label">Antrian Review</span>
-        <strong class="kpi-value" id="kpiReview">27</strong>
-        <span class="kpi-sub">Butuh tindakan supervisor</span>
-      </article>
-      <article class="kpi-card soft-shadow info">
-        <span class="kpi-label">Aset Berisiko Tinggi</span>
-        <strong class="kpi-value" id="kpiRisk">8</strong>
-        <span class="kpi-sub">Diprioritaskan untuk ditangani</span>
-      </article>
-    </div>
-
-    <div class="dashboard-grid">
-      <div class="card soft-shadow form-card">
-        <div class="card-head">
-          <div>
-            <h3>Form Input Maintenance</h3>
-            <p>Form terstruktur dengan validasi langsung dan penyimpanan lokal</p>
-          </div>
           <span class="status-pill status-live" id="formStatusPill">Siap Diisi</span>
         </div>
 
@@ -361,9 +295,65 @@
             <button class="btn-secondary" id="resetForm" type="button">Reset Form</button>
           </div>
         </form>
-      </div>
 
-      <div class="dashboard-side">
+        <div class="form-shortcuts">
+          <a href="#dashboard" class="btn-secondary">Lihat Dashboard</a>
+          <a href="#records" class="btn-secondary">Lihat Data Tersimpan</a>
+        </div>
+
+        <div class="form-page-note">
+          Setelah data diisi di sini, hasilnya akan langsung masuk ke dashboard, data tersimpan, review queue, dan audit trail.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="dashboard">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Demo Produk</div>
+      <h2>Dashboard yang sederhana, tapi menyelesaikan masalah operasional yang serius.</h2>
+      <p>Pengalamannya sengaja dibuat tenang, mudah dibaca, dan praktis. Tombol jelas. Angka besar. Alert bermakna. Pengguna tahu apa langkah berikutnya tanpa perlu menebak.</p>
+    </div>
+
+    <div class="demo-toolbar soft-shadow">
+      <div>
+        <strong>Kontrol Demo Interaktif</strong>
+        <p>Gunakan tombol ini saat presentasi untuk mensimulasikan perubahan data atau gunakan form nyata di bawah.</p>
+      </div>
+      <div class="demo-actions">
+        <button class="btn-secondary" id="simulateClean" type="button">Simulasi Data Bersih</button>
+        <button class="btn-secondary" id="simulateRisk" type="button">Simulasi Data Berisiko</button>
+        <button class="btn-primary" id="simulateApprove" type="button">Simulasi Approval</button>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <article class="kpi-card soft-shadow">
+        <span class="kpi-label">Total Tiket Maintenance</span>
+        <strong class="kpi-value" id="kpiTickets">1,284</strong>
+        <span class="kpi-sub">Bulan ini</span>
+      </article>
+      <article class="kpi-card soft-shadow success">
+        <span class="kpi-label">Tingkat Validasi Berhasil</span>
+        <strong class="kpi-value" id="kpiValidation">94%</strong>
+        <span class="kpi-sub">Naik 12% dari bulan lalu</span>
+      </article>
+      <article class="kpi-card soft-shadow warning">
+        <span class="kpi-label">Antrian Review</span>
+        <strong class="kpi-value" id="kpiReview">27</strong>
+        <span class="kpi-sub">Butuh tindakan supervisor</span>
+      </article>
+      <article class="kpi-card soft-shadow info">
+        <span class="kpi-label">Aset Berisiko Tinggi</span>
+        <strong class="kpi-value" id="kpiRisk">8</strong>
+        <span class="kpi-sub">Diprioritaskan untuk ditangani</span>
+      </article>
+    </div>
+
+    <div class="dashboard-grid dashboard-monitor-only">
+      <div class="dashboard-side dashboard-side-full">
         <div class="card soft-shadow review-card">
           <div class="card-head">
             <div>
