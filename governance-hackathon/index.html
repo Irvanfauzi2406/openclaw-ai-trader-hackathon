@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="GovernanceFlow — AI-assisted maintenance governance platform untuk standarisasi input, validasi data, review approval, dan audit trail yang mudah dipahami.">
+<meta name="description" content="GovernanceFlow — platform governance maintenance berbantuan AI untuk standarisasi input, validasi data, review approval, dan audit trail yang mudah dipahami.">
 <meta name="theme-color" content="#f6f8fc">
-<title>GovernanceFlow — AI Maintenance Governance</title>
+<title>GovernanceFlow — Governance Maintenance</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
     <div class="logo-mark">G</div>
     <div class="logo-text">
       <strong>GovernanceFlow</strong>
-      <span>AI Maintenance Governance</span>
+      <span>Governance Maintenance</span>
     </div>
   </div>
 
@@ -30,40 +30,41 @@
     <li><a href="#problem">Masalah</a></li>
     <li><a href="#solution">Solusi</a></li>
     <li><a href="#dashboard">Dashboard</a></li>
-    <li><a href="#impact">Impact</a></li>
+    <li><a href="#records">Data Tersimpan</a></li>
+    <li><a href="#impact">Dampak</a></li>
     <li><a href="#audit">Audit</a></li>
   </ul>
 
-  <a href="#dashboard" class="nav-cta">Try Demo</a>
+  <a href="#dashboard" class="nav-cta">Coba Demo</a>
 </nav>
 
 <section class="hero" id="home">
   <div class="hero-bg"></div>
   <div class="container hero-grid">
     <div class="hero-copy">
-      <div class="eyebrow">Hackathon Project · Governance</div>
+      <div class="eyebrow">Project Hackathon · Governance</div>
       <h1>Data maintenance yang tadinya berantakan, sekarang jadi <span>terstruktur, tervalidasi, dan bisa diaudit</span>.</h1>
       <p>
-        GovernanceFlow adalah web app berbasis AI-assisted validation untuk membantu tim operasional, supervisor,
-        dan manager menjaga kualitas data maintenance. Lebih sedikit typo, lebih sedikit duplikasi,
+        GovernanceFlow adalah aplikasi web untuk membantu tim operasional, supervisor,
+        dan manajer menjaga kualitas data maintenance. Lebih sedikit typo, lebih sedikit duplikasi,
         dan keputusan maintenance jadi lebih cepat diambil.
       </p>
       <div class="hero-actions">
-        <a href="#dashboard" class="btn-primary">Explore Dashboard</a>
-        <a href="#impact" class="btn-secondary">See Business Impact</a>
+        <a href="#dashboard" class="btn-primary">Buka Dashboard</a>
+        <a href="#impact" class="btn-secondary">Lihat Dampak</a>
       </div>
       <div class="hero-stats">
         <div class="stat-card">
           <div class="stat-value">94%</div>
-          <div class="stat-label">Data valid after submission</div>
+          <div class="stat-label">Data valid setelah dikirim</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">-68%</div>
-          <div class="stat-label">Manual correction workload</div>
+          <div class="stat-label">Koreksi manual berkurang</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">+37%</div>
-          <div class="stat-label">Faster approval readiness</div>
+          <div class="stat-label">Kesiapan approval lebih cepat</div>
         </div>
       </div>
     </div>
@@ -76,33 +77,33 @@
         <div class="window-body">
           <div class="mini-kpi-row">
             <div class="mini-kpi success">
-              <small>Validated Tickets</small>
+              <small>Data Tervalidasi</small>
               <strong id="miniValidated">148</strong>
             </div>
             <div class="mini-kpi warning">
-              <small>Need Review</small>
+              <small>Perlu Review</small>
               <strong id="miniNeedReview">12</strong>
             </div>
           </div>
           <div class="mini-form-card">
-            <div class="mini-form-title">Real-time Validation Snapshot</div>
-            <div class="fake-input">Asset ID: <b id="snapshotAsset">TRK-PLT-204</b></div>
-            <div class="fake-input">Location: <b id="snapshotLocation">Warehouse Bekasi 2</b></div>
-            <div class="fake-input">Maintenance Type: <b id="snapshotType">Preventive</b></div>
-            <div class="fake-alert" id="snapshotAlert">✓ Asset verified · ✓ Format valid · ⚠ Similar issue found 6 days ago</div>
+            <div class="mini-form-title">Ringkasan Validasi Langsung</div>
+            <div class="fake-input">ID Aset: <b id="snapshotAsset">TRK-PLT-204</b></div>
+            <div class="fake-input">Lokasi: <b id="snapshotLocation">Warehouse Bekasi 2</b></div>
+            <div class="fake-input">Jenis Maintenance: <b id="snapshotType">Preventive</b></div>
+            <div class="fake-alert" id="snapshotAlert">✓ Aset terverifikasi · ✓ Format valid · ⚠ Ada issue serupa 6 hari lalu</div>
           </div>
           <div class="mini-list">
             <div class="mini-list-item">
               <span class="dot green"></span>
-              <p>Clean entries go directly to the dashboard</p>
+              <p>Data bersih langsung masuk dashboard</p>
             </div>
             <div class="mini-list-item">
               <span class="dot orange"></span>
-              <p>Suspicious entries go to supervisor review</p>
+              <p>Data mencurigakan masuk review supervisor</p>
             </div>
             <div class="mini-list-item">
               <span class="dot blue"></span>
-              <p>All changes are recorded in audit trail</p>
+              <p>Semua perubahan tercatat di audit trail</p>
             </div>
           </div>
         </div>
@@ -114,31 +115,31 @@
 <section class="section" id="problem">
   <div class="container">
     <div class="section-head center">
-      <div class="eyebrow">Problem Statement</div>
-      <h2>Maintenance records often fail before the machines do.</h2>
-      <p>Many organizations still rely on manual logging, inconsistent naming, and fragmented approval flows. The result is poor data integrity, slow decision-making, and increased operational risk.</p>
+      <div class="eyebrow">Rumusan Masalah</div>
+      <h2>Sering kali yang gagal duluan bukan mesin, tapi catatan maintenancenya.</h2>
+      <p>Banyak organisasi masih mengandalkan pencatatan manual, penamaan yang tidak konsisten, dan alur approval yang terpecah. Hasilnya: integritas data rendah, pengambilan keputusan lambat, dan risiko operasional meningkat.</p>
     </div>
 
     <div class="issue-grid">
       <article class="issue-card soft-shadow">
         <div class="issue-icon red">!</div>
-        <h3>Inconsistent Input</h3>
-        <p>Asset names, location labels, and status values are often entered in different formats.</p>
+        <h3>Input Tidak Seragam</h3>
+        <p>Nama aset, label lokasi, dan status sering ditulis dengan format yang berbeda-beda.</p>
       </article>
       <article class="issue-card soft-shadow">
         <div class="issue-icon orange">≠</div>
-        <h3>Weak Validation</h3>
-        <p>Teams submit records without a consistent mechanism to detect duplicates or malformed entries.</p>
+        <h3>Validasi Lemah</h3>
+        <p>Tim mengirim data tanpa mekanisme konsisten untuk mendeteksi duplikasi atau format yang salah.</p>
       </article>
       <article class="issue-card soft-shadow">
         <div class="issue-icon blue">⏱</div>
-        <h3>Slow Approval Flow</h3>
-        <p>Supervisors waste time checking questionable entries manually instead of acting on real issues.</p>
+        <h3>Approval Lambat</h3>
+        <p>Supervisor habis waktu mengecek data meragukan secara manual, bukan fokus ke issue yang penting.</p>
       </article>
       <article class="issue-card soft-shadow">
         <div class="issue-icon green">✓</div>
-        <h3>Low Accountability</h3>
-        <p>There is no clear trail showing who changed what, when, and for what reason.</p>
+        <h3>Akuntabilitas Lemah</h3>
+        <p>Tidak ada jejak yang jelas tentang siapa mengubah apa, kapan, dan untuk alasan apa.</p>
       </article>
     </div>
   </div>
@@ -148,47 +149,47 @@
   <div class="container split-layout">
     <div>
       <div class="section-head left">
-        <div class="eyebrow">Solution Overview</div>
-        <h2>One interface that standardizes input, flags risk, and supports governance.</h2>
-        <p>GovernanceFlow combines structured forms, AI-assisted validation, approval routing, and audit visibility in a dashboard designed for clarity — especially for non-technical and senior users.</p>
+        <div class="eyebrow">Gambaran Solusi</div>
+        <h2>Satu antarmuka untuk standarisasi input, tandai risiko, dan dukung governance.</h2>
+        <p>GovernanceFlow menggabungkan form terstruktur, validasi data, routing approval, dan visibilitas audit dalam dashboard yang jelas — terutama untuk user non-teknis dan pengguna senior.</p>
       </div>
 
       <div class="feature-list">
         <div class="feature-row">
           <div class="feature-badge">1</div>
           <div>
-            <h3>Standardized Smart Form</h3>
-            <p>Clean layout, larger text, clear field grouping, and mandatory structure reduce confusion and prevent missing data.</p>
+            <h3>Form Standar yang Jelas</h3>
+            <p>Layout bersih, teks lebih besar, grouping field rapi, dan struktur wajib yang mengurangi kebingungan serta mencegah data kosong.</p>
           </div>
         </div>
         <div class="feature-row">
           <div class="feature-badge">2</div>
           <div>
-            <h3>AI-assisted Validation</h3>
-            <p>The system checks format errors, unusual values, duplicate patterns, and possible inconsistencies before records move forward.</p>
+            <h3>Validasi Data Otomatis</h3>
+            <p>Sistem memeriksa kesalahan format, nilai yang tidak biasa, pola duplikasi, dan potensi inkonsistensi sebelum data lanjut dipakai.</p>
           </div>
         </div>
         <div class="feature-row">
           <div class="feature-badge">3</div>
           <div>
-            <h3>Approval & Audit Governance</h3>
-            <p>Supervisors review only what matters, while every action remains traceable for accountability and reporting.</p>
+            <h3>Approval dan Audit Governance</h3>
+            <p>Supervisor hanya review data yang penting, sementara setiap aksi tetap bisa dilacak untuk akuntabilitas dan pelaporan.</p>
           </div>
         </div>
       </div>
     </div>
 
     <div class="summary-card soft-shadow">
-      <h3>Why this is a Governance product</h3>
+      <h3>Kenapa ini produk Governance</h3>
       <ul class="check-list">
-        <li>Standardizes maintenance reporting process</li>
-        <li>Improves data integrity and comparability</li>
-        <li>Creates clear review accountability</li>
-        <li>Supports better risk-based decisions</li>
-        <li>Provides traceable audit history</li>
+        <li>Menstandarkan proses pelaporan maintenance</li>
+        <li>Meningkatkan integritas dan konsistensi data</li>
+        <li>Menciptakan akuntabilitas review yang jelas</li>
+        <li>Mendukung keputusan berbasis risiko</li>
+        <li>Menyediakan histori audit yang bisa ditelusuri</li>
       </ul>
       <div class="summary-note">
-        Built for logistics teams, internal operations, warehouse management, fleet maintenance, and enterprise asset governance scenarios.
+        Cocok untuk tim logistik, operasional internal, warehouse management, fleet maintenance, dan skenario enterprise asset governance.
       </div>
     </div>
   </div>
@@ -197,43 +198,43 @@
 <section class="section" id="dashboard">
   <div class="container">
     <div class="section-head center">
-      <div class="eyebrow">Product Demo</div>
-      <h2>A dashboard that looks simple, but solves a serious operational problem.</h2>
-      <p>The experience is intentionally calm, readable, and practical. Buttons are obvious. Numbers are large. Alerts are meaningful. Users know what to do next without guessing.</p>
+      <div class="eyebrow">Demo Produk</div>
+      <h2>Dashboard yang sederhana, tapi menyelesaikan masalah operasional yang serius.</h2>
+      <p>Pengalamannya sengaja dibuat tenang, mudah dibaca, dan praktis. Tombol jelas. Angka besar. Alert bermakna. Pengguna tahu apa langkah berikutnya tanpa perlu menebak.</p>
     </div>
 
     <div class="demo-toolbar soft-shadow">
       <div>
-        <strong>Interactive Demo Controls</strong>
+        <strong>Kontrol Demo Interaktif</strong>
         <p>Gunakan tombol ini saat presentasi untuk mensimulasikan perubahan data atau gunakan form nyata di bawah.</p>
       </div>
       <div class="demo-actions">
-        <button class="btn-secondary" id="simulateClean" type="button">Simulate Clean Record</button>
-        <button class="btn-secondary" id="simulateRisk" type="button">Simulate Risk Flag</button>
-        <button class="btn-primary" id="simulateApprove" type="button">Simulate Approval</button>
+        <button class="btn-secondary" id="simulateClean" type="button">Simulasi Data Bersih</button>
+        <button class="btn-secondary" id="simulateRisk" type="button">Simulasi Data Berisiko</button>
+        <button class="btn-primary" id="simulateApprove" type="button">Simulasi Approval</button>
       </div>
     </div>
 
     <div class="kpi-grid">
       <article class="kpi-card soft-shadow">
-        <span class="kpi-label">Maintenance Tickets</span>
+        <span class="kpi-label">Total Tiket Maintenance</span>
         <strong class="kpi-value" id="kpiTickets">1,284</strong>
-        <span class="kpi-sub">This month</span>
+        <span class="kpi-sub">Bulan ini</span>
       </article>
       <article class="kpi-card soft-shadow success">
-        <span class="kpi-label">Validation Success Rate</span>
+        <span class="kpi-label">Tingkat Validasi Berhasil</span>
         <strong class="kpi-value" id="kpiValidation">94%</strong>
-        <span class="kpi-sub">+12% vs previous month</span>
+        <span class="kpi-sub">Naik 12% dari bulan lalu</span>
       </article>
       <article class="kpi-card soft-shadow warning">
-        <span class="kpi-label">Pending Review Queue</span>
+        <span class="kpi-label">Antrian Review</span>
         <strong class="kpi-value" id="kpiReview">27</strong>
-        <span class="kpi-sub">Requires supervisor action</span>
+        <span class="kpi-sub">Butuh tindakan supervisor</span>
       </article>
       <article class="kpi-card soft-shadow info">
-        <span class="kpi-label">High-risk Assets</span>
+        <span class="kpi-label">Aset Berisiko Tinggi</span>
         <strong class="kpi-value" id="kpiRisk">8</strong>
-        <span class="kpi-sub">Prioritized for attention</span>
+        <span class="kpi-sub">Diprioritaskan untuk ditangani</span>
       </article>
     </div>
 
@@ -241,24 +242,24 @@
       <div class="card soft-shadow form-card">
         <div class="card-head">
           <div>
-            <h3>New Maintenance Submission</h3>
-            <p>Structured form with live validation and local persistence</p>
+            <h3>Form Input Maintenance</h3>
+            <p>Form terstruktur dengan validasi langsung dan penyimpanan lokal</p>
           </div>
-          <span class="status-pill status-live" id="formStatusPill">Ready to Input</span>
+          <span class="status-pill status-live" id="formStatusPill">Siap Diisi</span>
         </div>
 
         <form class="maintenance-form" id="maintenanceForm">
           <div class="form-grid">
             <label>
-              <span>Asset ID</span>
+              <span>ID Aset</span>
               <input type="text" id="assetId" placeholder="Contoh: TRK-PLT-204" required>
             </label>
             <label>
-              <span>Location</span>
+              <span>Lokasi</span>
               <input type="text" id="location" placeholder="Contoh: Warehouse Bekasi 2" required>
             </label>
             <label>
-              <span>Maintenance Type</span>
+              <span>Jenis Maintenance</span>
               <select id="maintenanceType" required>
                 <option value="">Pilih jenis maintenance</option>
                 <option>Preventive Maintenance</option>
@@ -268,25 +269,25 @@
               </select>
             </label>
             <label>
-              <span>Date</span>
+              <span>Tanggal</span>
               <input type="date" id="maintenanceDate" required>
             </label>
             <label>
-              <span>Assigned Technician</span>
+              <span>Teknisi Penanggung Jawab</span>
               <input type="text" id="technician" placeholder="Nama teknisi" required>
             </label>
             <label>
-              <span>Workflow Status</span>
+              <span>Status Alur Kerja</span>
               <select id="workflowStatus" required>
                 <option value="Draft">Draft</option>
-                <option value="Waiting for Approval" selected>Waiting for Approval</option>
-                <option value="Under Review">Under Review</option>
+                <option value="Menunggu Approval" selected>Menunggu Approval</option>
+                <option value="Sedang Direview">Sedang Direview</option>
               </select>
             </label>
           </div>
 
           <label class="full-width">
-            <span>Maintenance Note</span>
+            <span>Catatan Maintenance</span>
             <textarea rows="4" id="maintenanceNote" placeholder="Tuliskan detail issue, kondisi aset, atau rekomendasi tindak lanjut" required></textarea>
           </label>
 
@@ -297,8 +298,8 @@
           <div class="form-feedback" id="formFeedback"></div>
 
           <div class="form-actions">
-            <button class="btn-primary" id="saveRecord" type="submit">Save Record</button>
-            <button class="btn-secondary" id="sendReviewer" type="button">Send to Reviewer</button>
+            <button class="btn-primary" id="saveRecord" type="submit">Simpan Data</button>
+            <button class="btn-secondary" id="sendReviewer" type="button">Kirim ke Reviewer</button>
             <button class="btn-secondary" id="resetForm" type="button">Reset Form</button>
           </div>
         </form>
@@ -308,8 +309,8 @@
         <div class="card soft-shadow review-card">
           <div class="card-head">
             <div>
-              <h3>Priority Review Queue</h3>
-              <p>Entries requiring decision</p>
+              <h3>Antrian Review Prioritas</h3>
+              <p>Data yang membutuhkan keputusan</p>
             </div>
           </div>
           <div class="review-list" id="reviewList"></div>
@@ -318,16 +319,16 @@
         <div class="card soft-shadow chart-card">
           <div class="card-head">
             <div>
-              <h3>Weekly Data Quality Score</h3>
-              <p>Simulation of 7-day performance</p>
+              <h3>Skor Kualitas Data Mingguan</h3>
+              <p>Simulasi performa 7 hari terakhir</p>
             </div>
           </div>
           <div class="bars">
-            <div class="bar-row"><span>Mon</span><div class="bar"><i style="width:82%"></i></div><b>82%</b></div>
-            <div class="bar-row"><span>Tue</span><div class="bar"><i style="width:88%"></i></div><b>88%</b></div>
-            <div class="bar-row"><span>Wed</span><div class="bar"><i style="width:84%"></i></div><b>84%</b></div>
-            <div class="bar-row"><span>Thu</span><div class="bar"><i style="width:91%"></i></div><b>91%</b></div>
-            <div class="bar-row"><span>Fri</span><div class="bar"><i style="width:94%"></i></div><b>94%</b></div>
+            <div class="bar-row"><span>Sen</span><div class="bar"><i style="width:82%"></i></div><b>82%</b></div>
+            <div class="bar-row"><span>Sel</span><div class="bar"><i style="width:88%"></i></div><b>88%</b></div>
+            <div class="bar-row"><span>Rab</span><div class="bar"><i style="width:84%"></i></div><b>84%</b></div>
+            <div class="bar-row"><span>Kam</span><div class="bar"><i style="width:91%"></i></div><b>91%</b></div>
+            <div class="bar-row"><span>Jum</span><div class="bar"><i style="width:94%"></i></div><b>94%</b></div>
           </div>
         </div>
       </div>
@@ -335,30 +336,75 @@
   </div>
 </section>
 
+<section class="section section-alt" id="records">
+  <div class="container">
+    <div class="section-head center">
+      <div class="eyebrow">Data Tersimpan</div>
+      <h2>Semua record yang sudah masuk bisa dilihat dan difilter.</h2>
+      <p>Bagian ini membantu supervisor dan manajer memeriksa data yang sudah disimpan berdasarkan status, tanpa harus membaca audit trail satu per satu.</p>
+    </div>
+
+    <div class="records-toolbar soft-shadow">
+      <div>
+        <strong>Filter Data</strong>
+        <p>Pilih status untuk menampilkan record yang relevan.</p>
+      </div>
+      <div class="records-filter-group">
+        <label class="filter-label" for="statusFilter">Status</label>
+        <select id="statusFilter" class="status-filter">
+          <option value="Semua">Semua</option>
+          <option value="Valid">Valid</option>
+          <option value="Menunggu Review">Menunggu Review</option>
+          <option value="Warning">Warning</option>
+          <option value="Approved">Approved</option>
+          <option value="Revised">Revised</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-card soft-shadow">
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th>ID Aset</th>
+            <th>Lokasi</th>
+            <th>Jenis</th>
+            <th>Tanggal</th>
+            <th>Teknisi</th>
+            <th>Status</th>
+            <th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody id="recordsRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 <section class="section section-alt" id="impact">
   <div class="container">
     <div class="section-head center">
-      <div class="eyebrow">Business Impact</div>
-      <h2>This is not just a dashboard. It changes how maintenance decisions are made.</h2>
-      <p>When input quality improves, maintenance planning becomes more reliable. That means fewer wrong assumptions, fewer wasted reviews, and faster response to asset risk.</p>
+      <div class="eyebrow">Dampak Bisnis</div>
+      <h2>Ini bukan cuma dashboard. Ini mengubah cara keputusan maintenance diambil.</h2>
+      <p>Saat kualitas input membaik, planning maintenance juga jadi lebih andal. Artinya lebih sedikit asumsi salah, lebih sedikit review yang terbuang, dan respons ke risiko aset jadi lebih cepat.</p>
     </div>
 
     <div class="impact-grid">
       <article class="impact-card soft-shadow">
-        <h3>Operational Efficiency</h3>
-        <p>Reduce manual back-and-forth between admin, supervisor, and manager by standardizing the first entry point.</p>
+        <h3>Efisiensi Operasional</h3>
+        <p>Mengurangi bolak-balik manual antara admin, supervisor, dan manajer dengan menstandarkan titik input pertama.</p>
       </article>
       <article class="impact-card soft-shadow">
-        <h3>Data Integrity</h3>
-        <p>Improve consistency of naming, asset references, issue categories, and approval-ready records.</p>
+        <h3>Integritas Data</h3>
+        <p>Meningkatkan konsistensi penamaan, referensi aset, kategori issue, dan kesiapan data untuk approval.</p>
       </article>
       <article class="impact-card soft-shadow">
-        <h3>Governance Visibility</h3>
-        <p>Track review actions, revisions, and approvals with clear ownership and timestamped history.</p>
+        <h3>Visibilitas Governance</h3>
+        <p>Melacak aksi review, revisi, dan approval dengan ownership yang jelas dan histori bertimestamp.</p>
       </article>
       <article class="impact-card soft-shadow">
-        <h3>Risk Reduction</h3>
-        <p>Catch suspicious records early so the organization can prioritize the right assets before downtime escalates.</p>
+        <h3>Pengurangan Risiko</h3>
+        <p>Menangkap record mencurigakan lebih awal agar organisasi bisa memprioritaskan aset yang tepat sebelum downtime membesar.</p>
       </article>
     </div>
   </div>
@@ -368,20 +414,20 @@
   <div class="container">
     <div class="section-head center">
       <div class="eyebrow">Audit Trail</div>
-      <h2>Every action remains visible, accountable, and reviewable.</h2>
-      <p>For governance use cases, this matters. Each update captures the timeline, actor, status, and rationale behind every record movement.</p>
+      <h2>Setiap aksi tetap terlihat, akuntabel, dan bisa direview.</h2>
+      <p>Untuk use case governance, ini penting. Setiap update menangkap timeline, pelaku, status, dan alasan di balik perpindahan data.</p>
     </div>
 
     <div class="table-card soft-shadow">
       <table class="audit-table">
         <thead>
           <tr>
-            <th>Timestamp</th>
-            <th>Asset</th>
-            <th>Action</th>
-            <th>User</th>
+            <th>Waktu</th>
+            <th>Aset</th>
+            <th>Aksi</th>
+            <th>Pengguna</th>
             <th>Status</th>
-            <th>Reason / Note</th>
+            <th>Alasan / Catatan</th>
           </tr>
         </thead>
         <tbody id="auditRows"></tbody>
@@ -393,11 +439,11 @@
 <section class="section cta-section">
   <div class="container cta-box soft-shadow">
     <div>
-      <div class="eyebrow">Closing Pitch</div>
-      <h2>GovernanceFlow turns maintenance logs into reliable governance data.</h2>
-      <p>Simple enough for daily operations. Strong enough for managerial control. Useful enough for real deployment after the hackathon.</p>
+      <div class="eyebrow">Penutup</div>
+      <h2>GovernanceFlow mengubah log maintenance menjadi data governance yang bisa dipercaya.</h2>
+      <p>Sederhana untuk operasional harian. Kuat untuk kontrol manajerial. Cukup berguna untuk dikembangkan jadi sistem nyata setelah hackathon.</p>
     </div>
-    <a href="#home" class="btn-primary">Back to Top</a>
+    <a href="#home" class="btn-primary">Kembali ke Atas</a>
   </div>
 </section>
 
@@ -405,12 +451,12 @@
   <div class="container footer-inner">
     <div>
       <strong>GovernanceFlow</strong>
-      <p>Hackathon prototype · Governance category</p>
+      <p>Prototype hackathon · kategori Governance</p>
     </div>
     <div class="footer-links">
-      <a href="#problem">Problem</a>
+      <a href="#problem">Masalah</a>
       <a href="#dashboard">Dashboard</a>
-      <a href="#impact">Impact</a>
+      <a href="#records">Data</a>
       <a href="#audit">Audit</a>
     </div>
   </div>

@@ -32,17 +32,17 @@ const defaultState = {
     {
       id: 'review-1',
       asset: 'Forklift FL-12',
-      note: 'Current location does not match last approved record',
-      level: 'High',
+      note: 'Lokasi saat ini tidak sesuai dengan data approved terakhir',
+      level: 'Tinggi',
       className: 'critical',
-      location: 'West Depot',
+      location: 'Depot Barat',
       maintenanceType: 'Inspection'
     },
     {
       id: 'review-2',
       asset: 'Conveyor CV-08',
-      note: 'Possible duplicate ticket submitted within 2 hours',
-      level: 'Medium',
+      note: 'Ada kemungkinan tiket duplikat dikirim dalam 2 jam yang sama',
+      level: 'Sedang',
       className: 'medium',
       location: 'Line 2',
       maintenanceType: 'Preventive Maintenance'
@@ -50,8 +50,8 @@ const defaultState = {
     {
       id: 'review-3',
       asset: 'Truck TR-77',
-      note: 'Maintenance note too short and missing key detail',
-      level: 'Low',
+      note: 'Catatan maintenance terlalu singkat dan kurang detail penting',
+      level: 'Rendah',
       className: 'low',
       location: 'Pool A',
       maintenanceType: 'Corrective Maintenance'
@@ -61,50 +61,34 @@ const defaultState = {
     {
       time: '14 Apr 2026 · 08:14',
       asset: 'TRK-PLT-204',
-      action: 'New Submission',
-      user: 'Warehouse Admin',
+      action: 'Pengajuan Baru',
+      user: 'Admin Gudang',
       status: 'Valid',
-      note: 'Preventive maintenance ticket created successfully'
+      note: 'Tiket preventive maintenance berhasil dibuat'
     },
     {
       time: '14 Apr 2026 · 08:17',
       asset: 'CV-08',
-      action: 'Risk Flagged',
-      user: 'System AI Check',
+      action: 'Ditandai Berisiko',
+      user: 'Sistem Validasi',
       status: 'Warning',
-      note: 'Potential duplicate with similar issue reported 2 hours earlier'
+      note: 'Potensi duplikasi dengan issue serupa dalam 2 jam sebelumnya'
     },
     {
       time: '14 Apr 2026 · 08:23',
       asset: 'FL-12',
-      action: 'Field Revision',
-      user: 'Area Supervisor',
+      action: 'Revisi Field',
+      user: 'Supervisor Area',
       status: 'Revised',
-      note: 'Location corrected to West Depot after mismatch detected'
+      note: 'Lokasi diperbaiki ke Depot Barat setelah mismatch terdeteksi'
     },
     {
       time: '14 Apr 2026 · 08:30',
       asset: 'TR-77',
-      action: 'Approved for Scheduling',
-      user: 'Operations Manager',
+      action: 'Disetujui untuk Penjadwalan',
+      user: 'Manajer Operasional',
       status: 'Approved',
-      note: 'Record accepted and forwarded for technician scheduling'
-    },
-    {
-      time: '14 Apr 2026 · 08:44',
-      asset: 'MC-11',
-      action: 'Additional Note Added',
-      user: 'Field Technician',
-      status: 'Updated',
-      note: 'Added abnormal motor noise detail for future traceability'
-    },
-    {
-      time: '14 Apr 2026 · 09:02',
-      asset: 'CR-03',
-      action: 'Escalated',
-      user: 'System AI Check',
-      status: 'Warning',
-      note: 'Repeated issue pattern detected across 3 recent maintenance cycles'
+      note: 'Data diterima dan diteruskan ke penjadwalan teknisi'
     }
   ]
 };
@@ -142,6 +126,8 @@ const els = {
   miniNeedReview: document.getElementById('miniNeedReview'),
   reviewList: document.getElementById('reviewList'),
   auditRows: document.getElementById('auditRows'),
+  recordsRows: document.getElementById('recordsRows'),
+  statusFilter: document.getElementById('statusFilter'),
   form: document.getElementById('maintenanceForm'),
   assetId: document.getElementById('assetId'),
   location: document.getElementById('location'),
@@ -169,13 +155,13 @@ function saveState() {
 }
 
 function getNowLabel() {
-  return new Date().toLocaleString('en-GB', {
+  return new Date().toLocaleString('id-ID', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
-  }).replace(',', ' ·');
+  }).replace('.', ':');
 }
 
 function getStatusClass(status) {
@@ -186,8 +172,9 @@ function getStatusClass(status) {
     case 'warning':
       return 'badge badge-orange';
     case 'revised':
-    case 'updated':
       return 'badge badge-blue';
+    case 'menunggu review':
+      return 'badge badge-orange';
     default:
       return 'badge';
   }
@@ -226,14 +213,14 @@ function validateForm(data) {
   }
 
   if (data.assetId && !/^[A-Za-z0-9-]{5,}$/.test(data.assetId)) {
-    messages.push({ type: 'warn', text: 'Format Asset ID terlihat tidak standar.' });
+    messages.push({ type: 'warn', text: 'Format ID aset terlihat tidak standar.' });
   } else if (data.assetId) {
-    messages.push({ type: 'ok', text: 'Asset ID memenuhi format dasar.' });
+    messages.push({ type: 'ok', text: 'ID aset memenuhi format dasar.' });
   }
 
   const duplicate = state.records.find(record => record.assetId.toUpperCase() === normalizedAsset && record.maintenanceDate === data.maintenanceDate);
   if (duplicate) {
-    messages.push({ type: 'warn', text: 'Kemungkinan duplikasi: asset ini sudah pernah disimpan di tanggal yang sama.' });
+    messages.push({ type: 'warn', text: 'Kemungkinan duplikasi: aset ini sudah pernah disimpan di tanggal yang sama.' });
   }
 
   if (normalizedLocation && (normalizedLocation.includes('unknown') || normalizedLocation.length < 4)) {
@@ -288,7 +275,7 @@ function updateSnapshot(data, messages) {
 }
 
 function renderKpis() {
-  if (els.kpiTickets) els.kpiTickets.textContent = state.metrics.tickets.toLocaleString();
+  if (els.kpiTickets) els.kpiTickets.textContent = state.metrics.tickets.toLocaleString('id-ID');
   if (els.kpiValidation) els.kpiValidation.textContent = `${state.metrics.validation}%`;
   if (els.kpiReview) els.kpiReview.textContent = state.metrics.review;
   if (els.kpiRisk) els.kpiRisk.textContent = state.metrics.risk;
@@ -301,7 +288,7 @@ function renderReviewQueue() {
   els.reviewList.innerHTML = '';
 
   if (!state.reviewQueue.length) {
-    els.reviewList.innerHTML = '<div class="empty-state">Tidak ada item review. Queue sedang bersih.</div>';
+    els.reviewList.innerHTML = '<div class="empty-state">Tidak ada item review. Antrian sedang bersih.</div>';
     return;
   }
 
@@ -317,13 +304,42 @@ function renderReviewQueue() {
       <div class="review-side">
         <span>${item.level}</span>
         <div class="review-actions-inline">
-          <button type="button" class="small-btn approve-btn" data-action="approve" data-id="${item.id}">Approve</button>
-          <button type="button" class="small-btn revise-btn" data-action="revise" data-id="${item.id}">Request Revision</button>
-          <button type="button" class="small-btn risk-btn" data-action="risk" data-id="${item.id}">Flag Risk</button>
+          <button type="button" class="small-btn approve-btn" data-action="approve" data-id="${item.id}">Setujui</button>
+          <button type="button" class="small-btn revise-btn" data-action="revise" data-id="${item.id}">Minta Revisi</button>
+          <button type="button" class="small-btn risk-btn" data-action="risk" data-id="${item.id}">Tandai Risiko</button>
         </div>
       </div>
     `;
     els.reviewList.appendChild(div);
+  });
+}
+
+function renderRecordsTable() {
+  if (!els.recordsRows) return;
+  const selectedStatus = els.statusFilter?.value || 'Semua';
+  const records = selectedStatus === 'Semua'
+    ? state.records
+    : state.records.filter(record => record.status === selectedStatus);
+
+  els.recordsRows.innerHTML = '';
+
+  if (!records.length) {
+    els.recordsRows.innerHTML = `<tr><td colspan="7" class="empty-table">Belum ada data yang cocok dengan filter yang dipilih.</td></tr>`;
+    return;
+  }
+
+  records.forEach(record => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${record.assetId}</strong></td>
+      <td>${record.location}</td>
+      <td>${record.maintenanceType}</td>
+      <td>${record.maintenanceDate || '-'}</td>
+      <td>${record.technician}</td>
+      <td><span class="${getStatusClass(record.status)}">${record.status}</span></td>
+      <td>${record.maintenanceNote}</td>
+    `;
+    els.recordsRows.appendChild(tr);
   });
 }
 
@@ -354,6 +370,7 @@ function persistAndRender() {
   saveState();
   renderKpis();
   renderReviewQueue();
+  renderRecordsTable();
   renderAuditTable();
 }
 
@@ -372,7 +389,7 @@ function createRecord(data, mode) {
 
   if (hasBlockingError) {
     setFeedback('Form belum bisa diproses. Cek field wajib yang masih kosong.', 'error');
-    updateFormPill('Validation Error');
+    updateFormPill('Validasi Error');
     return null;
   }
 
@@ -383,7 +400,7 @@ function createRecord(data, mode) {
     id: `rec-${Date.now()}`,
     ...data,
     submittedAt: getNowLabel(),
-    status: mode === 'review' ? 'Under Review' : duplicateWarn || riskWarn ? 'Warning' : 'Valid',
+    status: mode === 'review' ? 'Menunggu Review' : duplicateWarn || riskWarn ? 'Warning' : 'Valid',
   };
 
   state.records.unshift(record);
@@ -402,7 +419,7 @@ function createRecord(data, mode) {
       id: `queue-${record.id}`,
       asset: record.assetId,
       note: record.maintenanceNote,
-      level: record.status === 'Warning' ? 'High' : 'Medium',
+      level: record.status === 'Warning' ? 'Tinggi' : 'Sedang',
       className: record.status === 'Warning' ? 'critical' : 'medium',
       location: record.location,
       maintenanceType: record.maintenanceType,
@@ -413,27 +430,27 @@ function createRecord(data, mode) {
   prependAuditRow({
     time: record.submittedAt,
     asset: record.assetId,
-    action: mode === 'review' ? 'Sent to Reviewer' : 'Record Saved',
+    action: mode === 'review' ? 'Dikirim ke Reviewer' : 'Data Disimpan',
     user: record.technician,
     status: record.status,
-    note: mode === 'review' ? 'Record routed to review queue for supervisor decision' : 'Record stored locally in browser state'
+    note: mode === 'review' ? 'Data diarahkan ke antrian review untuk keputusan supervisor' : 'Data disimpan di browser secara lokal'
   });
 
   recalculateValidation();
   persistAndRender();
 
-  setFeedback(mode === 'review' ? 'Record berhasil dikirim ke reviewer.' : 'Record berhasil disimpan di browser.', 'success');
-  updateFormPill(mode === 'review' ? 'Sent to Reviewer' : 'Saved Locally');
+  setFeedback(mode === 'review' ? 'Data berhasil dikirim ke reviewer.' : 'Data berhasil disimpan di browser.', 'success');
+  updateFormPill(mode === 'review' ? 'Terkirim ke Reviewer' : 'Tersimpan Lokal');
   return record;
 }
 
 function resetFormState() {
   if (els.form) els.form.reset();
-  if (els.workflowStatus) els.workflowStatus.value = 'Waiting for Approval';
+  if (els.workflowStatus) els.workflowStatus.value = 'Menunggu Approval';
   renderValidation([]);
   updateSnapshot({}, []);
   setFeedback('');
-  updateFormPill('Ready to Input');
+  updateFormPill('Siap Diisi');
 }
 
 function processQueueAction(action, id) {
@@ -452,45 +469,45 @@ function processQueueAction(action, id) {
     prependAuditRow({
       time: getNowLabel(),
       asset: item.asset,
-      action: 'Approved by Reviewer',
+      action: 'Disetujui Reviewer',
       user: 'Supervisor Demo',
       status: 'Approved',
-      note: 'Record approved and released for scheduling'
+      note: 'Data disetujui dan siap diteruskan ke penjadwalan'
     });
-    setFeedback(`${item.asset} berhasil di-approve.`, 'success');
+    setFeedback(`${item.asset} berhasil disetujui.`, 'success');
   }
 
   if (action === 'revise') {
-    state.reviewQueue[index].level = 'Medium';
+    state.reviewQueue[index].level = 'Sedang';
     state.reviewQueue[index].className = 'medium';
-    state.reviewQueue[index].note = `Revision requested: ${item.note}`;
+    state.reviewQueue[index].note = `Perlu revisi: ${item.note}`;
     if (relatedRecord) relatedRecord.status = 'Revised';
     prependAuditRow({
       time: getNowLabel(),
       asset: item.asset,
-      action: 'Revision Requested',
+      action: 'Diminta Revisi',
       user: 'Supervisor Demo',
       status: 'Revised',
-      note: 'Supervisor requested additional clarification before approval'
+      note: 'Supervisor meminta klarifikasi tambahan sebelum approval'
     });
     setFeedback(`${item.asset} diminta revisi.`, 'warn');
   }
 
   if (action === 'risk') {
-    state.reviewQueue[index].level = 'High';
+    state.reviewQueue[index].level = 'Tinggi';
     state.reviewQueue[index].className = 'critical';
-    state.reviewQueue[index].note = `Escalated risk: ${item.note}`;
+    state.reviewQueue[index].note = `Risiko ditingkatkan: ${item.note}`;
     state.metrics.risk += 1;
     if (relatedRecord) relatedRecord.status = 'Warning';
     prependAuditRow({
       time: getNowLabel(),
       asset: item.asset,
-      action: 'Risk Escalated',
+      action: 'Risiko Dinaikkan',
       user: 'Supervisor Demo',
       status: 'Warning',
-      note: 'Record escalated as high-risk for management attention'
+      note: 'Data dinaikkan menjadi high risk untuk perhatian manajemen'
     });
-    setFeedback(`${item.asset} dinaikkan jadi high risk.`, 'warn');
+    setFeedback(`${item.asset} ditandai sebagai risiko tinggi.`, 'warn');
   }
 
   recalculateValidation();
@@ -514,7 +531,7 @@ function bindFormEvents() {
       const messages = validateForm(data);
       renderValidation(messages);
       updateSnapshot(data, messages);
-      updateFormPill('Editing');
+      updateFormPill('Sedang Diedit');
     });
   });
 
@@ -530,18 +547,22 @@ function bindFormEvents() {
   els.resetForm?.addEventListener('click', () => {
     resetFormState();
   });
+
+  els.statusFilter?.addEventListener('change', () => {
+    renderRecordsTable();
+  });
 }
 
 function bindDemoButtons() {
   els.simulateClean?.addEventListener('click', () => {
     const record = {
       assetId: `SIM-${state.metrics.tickets + 1}`,
-      location: 'Warehouse Demo A',
+      location: 'Gudang Demo A',
       maintenanceType: 'Inspection',
       maintenanceDate: new Date().toISOString().slice(0, 10),
-      technician: 'Demo User',
+      technician: 'Pengguna Demo',
       workflowStatus: 'Draft',
-      maintenanceNote: 'Routine inspection completed with all required details filled correctly.'
+      maintenanceNote: 'Pemeriksaan rutin selesai dilakukan dengan detail lengkap dan format yang sesuai.'
     };
     createRecord(record, 'save');
   });
@@ -552,8 +573,8 @@ function bindDemoButtons() {
       location: 'Unknown',
       maintenanceType: 'Emergency Repair',
       maintenanceDate: new Date().toISOString().slice(0, 10),
-      technician: 'System AI Check',
-      workflowStatus: 'Under Review',
+      technician: 'Sistem Validasi',
+      workflowStatus: 'Sedang Direview',
       maintenanceNote: 'Critical abnormal vibration detected. urgent repeat abnormal issue.'
     };
     createRecord(record, 'review');
@@ -561,7 +582,7 @@ function bindDemoButtons() {
 
   els.simulateApprove?.addEventListener('click', () => {
     if (!state.reviewQueue.length) {
-      setFeedback('Tidak ada item review untuk di-approve.', 'warn');
+      setFeedback('Tidak ada item review untuk disetujui.', 'warn');
       return;
     }
     processQueueAction('approve', state.reviewQueue[0].id);
@@ -580,7 +601,7 @@ persistAndRender();
 renderValidation([]);
 updateSnapshot({}, []);
 
-const revealItems = document.querySelectorAll('.issue-card, .kpi-card, .card, .table-card, .summary-card, .impact-card, .demo-toolbar');
+const revealItems = document.querySelectorAll('.issue-card, .kpi-card, .card, .table-card, .summary-card, .impact-card, .demo-toolbar, .records-toolbar');
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {

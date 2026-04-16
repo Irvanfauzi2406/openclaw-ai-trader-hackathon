@@ -391,7 +391,8 @@ button {
 .workflow-card,
 .impact-card,
 .table-card,
-.cta-box {
+.cta-box,
+.records-toolbar {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
@@ -601,7 +602,8 @@ button {
   border: 1px dashed var(--line);
 }
 
-.demo-toolbar {
+.demo-toolbar,
+.records-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -611,16 +613,27 @@ button {
   background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
 }
 
-.demo-toolbar p {
+.demo-toolbar p,
+.records-toolbar p {
   color: var(--muted);
   font-size: 0.95rem;
   margin-top: 4px;
 }
 
-.demo-actions {
+.demo-actions,
+.records-filter-group {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-label {
+  font-weight: 700;
+}
+
+.status-filter {
+  min-width: 220px;
 }
 
 .kpi-grid {
@@ -879,7 +892,8 @@ textarea {
   color: var(--primary);
 }
 
-.empty-state {
+.empty-state,
+.empty-table {
   padding: 16px;
   border-radius: 16px;
   background: var(--surface-soft);
@@ -1069,6 +1083,7 @@ footer {
   }
 
   .demo-toolbar,
+  .records-toolbar,
   .cta-box,
   .footer-inner,
   .review-item {
@@ -1113,5 +1128,9 @@ footer {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
+  }
+
+  .status-filter {
+    min-width: 100%;
   }
 }
