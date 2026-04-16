@@ -155,6 +155,16 @@ const els = {
   simulateApprove: document.getElementById('simulateApprove'),
   sendReviewer: document.getElementById('sendReviewer'),
   resetForm: document.getElementById('resetForm'),
+  analyzeAiBtn: document.getElementById('analyzeAiBtn'),
+  analyzeAiText: document.getElementById('analyzeAiText'),
+  aiAnalysisPanel: document.getElementById('aiAnalysisPanel'),
+  aiRiskBadge: document.getElementById('aiRiskBadge'),
+  aiSummary: document.getElementById('aiSummary'),
+  aiRiskReasons: document.getElementById('aiRiskReasons'),
+  aiRecommendations: document.getElementById('aiRecommendations'),
+  aiAnomaliesSection: document.getElementById('aiAnomaliesSection'),
+  aiAnomalies: document.getElementById('aiAnomalies'),
+  aiAnalyzedAt: document.getElementById('aiAnalyzedAt'),
 };
 
 function saveState() {
@@ -510,6 +520,142 @@ function resetFormState() {
   updateSnapshot({}, []);
   setFeedback('');
   updateFormPill('Siap Diisi');
+  // Hide AI panel
+  if (els.aiAnalysisPanel) els.aiAnalysisPanel.style.display = 'none';
+}
+
+// --- AI Analysis ---
+let aiLoading = false;
+
+async function analyzeWithAI() {
+  if (aiLoading) return;
+  const data = getFormData();
+
+  if (!data.assetId || !data.maintenanceNote) {
+    setFeedback('Isi ID Aset dan Catatan Maintenance terlebih dahulu.', 'warn');
+    return;
+  }
+
+  aiLoading = true;
+  if (els.analyzeAiText) els.analyzeAiText.textContent = '⏳ Menganalisis...';
+  if (els.analyzeAiBtn) els.analyzeAiBtn.disabled = true;
+  setFeedback('', '');
+
+  try {
+    const response = await fetch('http://localhost:8000/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        asset_id: data.assetId,
+        location: data.location,
+        maintenance_type: data.maintenanceType,
+        technician: data.technician,
+        maintenance_note: data.maintenanceNote,
+      }),
+    });
+
+    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+    const result = await response.json();
+
+    if (!result.success) throw new Error(result.detail || 'Analysis failed');
+
+    const analysis = result.data;
+
+    // Show AI panel
+    if (els.aiAnalysisPanel) {
+      els.aiAnalysisPanel.style.display = 'block';
+    }
+
+    // Risk badge
+    const riskColors = {
+      low: '#27ae60',
+      medium: '#f39c12',
+      high: '#e67e22',
+      critical: '#c0392b',
+    };
+    const riskLabels = {
+      low: 'Rendah',
+      medium: 'Sedang',
+      high: 'Tinggi',
+      critical: 'Kritis',
+    };
+
+    if (els.aiRiskBadge) {
+      els.aiRiskBadge.textContent = `${riskLabels[analysis.risk_level] || analysis.risk_level} (${analysis.risk_score})`;
+      els.aiRiskBadge.style.background = riskColors[analysis.risk_level] || '#95a5a6';
+    }
+
+    // Summary
+    if (els.aiSummary) {
+      els.aiSummary.textContent = analysis.summary || '';
+    }
+
+    // Risk reasons
+    if (els.aiRiskReasons) {
+      els.aiRiskReasons.innerHTML = '';
+      (analysis.risk_reasons || []).forEach(reason => {
+        const li = document.createElement('li');
+        li.textContent = reason;
+        els.aiRiskReasons.appendChild(li);
+      });
+    }
+
+    // Recommendations
+    if (els.aiRecommendations) {
+      els.aiRecommendations.innerHTML = '';
+      (analysis.recommendations || []).forEach(rec => {
+        const li = document.createElement('li');
+        li.textContent = rec;
+        els.aiRecommendations.appendChild(li);
+      });
+    }
+
+    // Anomalies (if any)
+    const hasAnomalies = analysis.anomalies && analysis.anomalies.length > 0;
+    if (els.aiAnomaliesSection) {
+      els.aiAnomaliesSection.style.display = hasAnomalies ? 'block' : 'none';
+    }
+    if (hasAnomalies && els.aiAnomalies) {
+      els.aiAnomalies.innerHTML = '';
+      analysis.anomalies.forEach(anom => {
+        const li = document.createElement('li');
+        li.textContent = anom;
+        els.aiAnomalies.appendChild(li);
+      });
+    }
+
+    // Timestamp
+    if (els.aiAnalyzedAt) {
+      const time = new Date(analysis.analyzed_at).toLocaleString('id-ID', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+      els.aiAnalyzedAt.textContent = `Dianalisis: ${time}`;
+    }
+
+    // Add flagged keywords to validation
+    if (analysis.flagged_keywords && analysis.flagged_keywords.length > 0) {
+      const messages = validateForm(data);
+      messages.push({
+        type: 'warn',
+        text: `AI mendeteksi keyword mencurigakan: ${analysis.flagged_keywords.join(', ')}`,
+      });
+      renderValidation(messages);
+      updateSnapshot(data, messages);
+    }
+
+    updateFormPill(`AI: ${riskLabels[analysis.risk_level]}`);
+    setFeedback('Analisis AI berhasil. Lihat hasil di panel bawah form.', 'success');
+
+  } catch (err) {
+    console.error('AI analysis error:', err);
+    setFeedback(`Gagal memanggil AI: ${err.message}. Pastikan backend berjalan di port 8000.`, 'error');
+  } finally {
+    aiLoading = false;
+    if (els.analyzeAiText) els.analyzeAiText.textContent = '🔍 Analisis dengan AI';
+    if (els.analyzeAiBtn) els.analyzeAiBtn.disabled = false;
+  }
 }
 
 function clearLocalDemoData() {
@@ -615,6 +761,10 @@ function bindFormEvents() {
 
   els.resetForm?.addEventListener('click', () => {
     resetFormState();
+  });
+
+  els.analyzeAiBtn?.addEventListener('click', () => {
+    analyzeWithAI();
   });
 
   els.statusFilter?.addEventListener('change', () => {

@@ -103,11 +103,38 @@
           <div class="form-feedback" id="formFeedback"></div>
 
           <div class="form-actions">
+            <button class="btn-secondary" id="analyzeAiBtn" type="button">
+              <span id="analyzeAiText">🔍 Analisis dengan AI</span>
+            </button>
             <button class="btn-primary" id="saveRecord" type="submit">Simpan Data</button>
             <button class="btn-secondary" id="sendReviewer" type="button">Kirim ke Reviewer</button>
             <button class="btn-secondary" id="resetForm" type="button">Reset Form</button>
           </div>
         </form>
+
+        <!-- AI Analysis Result Panel -->
+        <div class="ai-analysis-panel" id="aiAnalysisPanel" style="display:none;">
+          <div class="ai-panel-header">
+            <div class="ai-panel-title">📊 Hasil Analisis AI</div>
+            <span class="ai-badge" id="aiRiskBadge">-</span>
+          </div>
+          <div class="ai-summary" id="aiSummary"></div>
+          <div class="ai-section">
+            <strong>Alasan Risiko:</strong>
+            <ul id="aiRiskReasons"></ul>
+          </div>
+          <div class="ai-section">
+            <strong>Rekomendasi:</strong>
+            <ul id="aiRecommendations"></ul>
+          </div>
+          <div class="ai-section" id="aiAnomaliesSection" style="display:none;">
+            <strong>🔎 Anomali Terdeteksi:</strong>
+            <ul id="aiAnomalies"></ul>
+          </div>
+          <div class="ai-section">
+            <small id="aiAnalyzedAt"></small>
+          </div>
+        </div>
 
         <div class="form-shortcuts">
           <a href="dashboard.html" class="btn-secondary">Lihat Dashboard</a>
