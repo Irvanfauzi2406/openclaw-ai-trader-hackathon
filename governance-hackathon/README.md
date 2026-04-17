@@ -1,16 +1,16 @@
-# GovernanceFlow
+# OPS GUARD
 
-**AI-assisted maintenance governance platform** untuk standarisasi input data maintenance, validasi otomatis, review approval, dan audit trail yang mudah dipahami.
+**AI-assisted maintenance operations platform** untuk standarisasi input data maintenance, validasi otomatis, review approval, dan audit trail yang mudah dipahami.
 
 ## Overview
 
-GovernanceFlow adalah prototype web app untuk menjawab masalah umum dalam operasional maintenance:
+OPS GUARD adalah prototype web app untuk menjawab masalah umum dalam operasional maintenance:
 - input data manual yang tidak seragam
 - typo dan duplikasi data
 - approval flow yang lambat
 - kurangnya audit trail dan akuntabilitas
 
-Platform ini membantu organisasi mengubah log maintenance menjadi data governance yang lebih rapi, tervalidasi, dan siap dipakai untuk pengambilan keputusan.
+Platform ini membantu organisasi mengubah log maintenance menjadi data operations yang lebih rapi, tervalidasi, dan siap dipakai untuk pengambilan keputusan.
 
 ## Problem Statement
 
@@ -23,7 +23,7 @@ Banyak tim operasional masih mencatat maintenance secara manual dengan format ya
 
 ## Solution
 
-GovernanceFlow menyediakan:
+OPS GUARD menyediakan:
 - **Smart Form** untuk input data terstruktur
 - **AI-assisted Validation** untuk mendeteksi format salah, duplikasi, dan inkonsistensi
 - **Approval Workflow** untuk review yang lebih fokus
@@ -63,7 +63,7 @@ Menampilkan:
 
 ## Why This Matters for Governance
 
-GovernanceFlow bukan sekadar dashboard operasional. Platform ini mendukung governance karena:
+OPS GUARD bukan sekadar dashboard operasional. Platform ini mendukung governance karena:
 - menstandardisasi proses pencatatan
 - meningkatkan integritas data
 - memperjelas akuntabilitas review
@@ -115,7 +115,7 @@ Versi lanjutan bisa dikembangkan dengan:
 
 ## Project Value
 
-GovernanceFlow menunjukkan bagaimana pendekatan governance bisa dibuat lebih praktis, mudah dipakai, dan relevan untuk operasional nyata — bukan hanya sebagai laporan, tapi sebagai sistem kerja harian.
+OPS GUARD menunjukkan bagaimana pendekatan governance bisa dibuat lebih praktis, mudah dipakai, dan relevan untuk operasional nyata — bukan hanya sebagai laporan, tapi sebagai sistem kerja harian.
 
 ---
 
@@ -142,4 +142,4 @@ Untuk deploy cepat:
 
 ## Submission One-liner
 
-**GovernanceFlow is an AI-assisted maintenance governance web app that standardizes maintenance reporting, improves data integrity, and enables accountable review through validation, approval routing, and audit visibility.**
+**OPS GUARD is an AI-assisted maintenance operations web app that standardizes maintenance reporting, improves data integrity, and enables accountable review through validation, approval routing, and audit visibility.**

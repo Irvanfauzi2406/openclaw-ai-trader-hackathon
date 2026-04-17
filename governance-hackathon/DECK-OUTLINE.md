@@ -1,7 +1,7 @@
-# GovernanceFlow — Deck Outline
+# OPS GUARD - Deck Outline
 
-## Slide 1 — Title
-**GovernanceFlow**  
+## Slide 1 - Title
+**OPS GUARD**
 AI-assisted Maintenance Governance Platform
 
 ### Isi:
@@ -11,7 +11,7 @@ AI-assisted Maintenance Governance Platform
 
 ---
 
-## Slide 2 — Problem
+## Slide 2 - Problem
 **The Hidden Governance Problem in Maintenance Operations**
 
 ### Poin utama:
@@ -26,7 +26,7 @@ Masalah utamanya bukan cuma maintenance, tapi kualitas data dan governance-nya.
 
 ---
 
-## Slide 3 — Why It Matters
+## Slide 3 - Why It Matters
 **Bad Records Lead to Bad Decisions**
 
 ### Dampak bisnis:
@@ -41,8 +41,8 @@ Jika data maintenance tidak bisa dipercaya, keputusan maintenance juga ikut mele
 
 ---
 
-## Slide 4 — Solution
-**GovernanceFlow: Simple, Structured, Accountable**
+## Slide 4 - Solution
+**OPS GUARD: Simple, Structured, Accountable**
 
 ### Solusi utama:
 - Structured submission form
@@ -52,11 +52,11 @@ Jika data maintenance tidak bisa dipercaya, keputusan maintenance juga ikut mele
 - Audit trail
 
 ### Inti pesan:
-GovernanceFlow membuat pencatatan maintenance lebih terstandar, tervalidasi, dan mudah diaudit.
+OPS GUARD membuat pencatatan maintenance lebih terstandar, tervalidasi, dan mudah diaudit.
 
 ---
 
-## Slide 5 — How It Works
+## Slide 5 - How It Works
 **Workflow**
 
 ### Step-by-step:
@@ -71,7 +71,7 @@ Sistemnya sederhana untuk user, tapi kuat untuk governance.
 
 ---
 
-## Slide 6 — Demo Highlights
+## Slide 6 - Demo Highlights
 **Product Demonstration**
 
 ### Tunjukkan:
@@ -87,7 +87,7 @@ Produk ini terasa seperti solusi nyata, bukan sekadar mockup statis.
 
 ---
 
-## Slide 7 — Impact
+## Slide 7 - Impact
 **Operational and Governance Impact**
 
 ### Gunakan angka dari demo:
@@ -97,11 +97,11 @@ Produk ini terasa seperti solusi nyata, bukan sekadar mockup statis.
 - 8 high-risk assets identified
 
 ### Inti pesan:
-GovernanceFlow membantu organisasi membuat keputusan maintenance lebih cepat dan lebih akuntabel.
+OPS GUARD membantu organisasi membuat keputusan maintenance lebih cepat dan lebih akuntabel.
 
 ---
 
-## Slide 8 — Why This Fits Governance
+## Slide 8 - Why This Fits Governance
 **Governance in Action**
 
 ### Relevansi tema:
@@ -112,11 +112,11 @@ GovernanceFlow membantu organisasi membuat keputusan maintenance lebih cepat dan
 - Better data-driven decisions
 
 ### Inti pesan:
-Governance bukan teori di atas kertas — GovernanceFlow menjadikannya praktik harian.
+Governance bukan teori di atas kertas - OPS GUARD menjadikannya praktik harian.
 
 ---
 
-## Slide 9 — Future Potential
+## Slide 9 - Future Potential
 **Beyond the Prototype**
 
 ### Pengembangan berikutnya:
@@ -132,12 +132,12 @@ Prototype ini bisa berkembang jadi produk enterprise yang nyata.
 
 ---
 
-## Slide 10 — Closing
+## Slide 10 - Closing
 **Closing Statement**
 
-GovernanceFlow helps organizations move from messy maintenance records to reliable governance data.
+OPS GUARD helps organizations move from messy maintenance records to reliable operations data.
 
 ### Penutup singkat:
-Simple enough for daily operations.  
-Strong enough for management oversight.  
+Simple enough for daily operations.
+Strong enough for management oversight.
 Practical enough for real-world deployment.

@@ -1,5 +1,5 @@
 """
-GovernanceFlow Backend — FastAPI + Groq AI Integration
+OPS GUARD Backend — FastAPI + Groq AI Integration
 Menjalankan: uvicorn main:app --reload --port 8000
 """
 
@@ -37,8 +37,8 @@ class RecommendationItem(BaseModel):
 
 # FastAPI app
 app = FastAPI(
-    title="GovernanceFlow API",
-    description="AI-powered maintenance governance backend",
+    title="OPS GUARD API",
+    description="AI-powered maintenance operations backend",
     version="1.0.0"
 )
 
@@ -81,7 +81,7 @@ Rules:
 async def root():
     return {
         "status": "online",
-        "service": "GovernanceFlow AI Backend",
+        "service": "OPS GUARD AI Backend",
         "version": "1.0.0",
         "timestamp": datetime.now().isoformat()
     }

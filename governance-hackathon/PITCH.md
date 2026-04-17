@@ -1,4 +1,4 @@
-# GovernanceFlow — Pitch Narrative
+# OPS GUARD — Pitch Narrative
 
 ## 1. Opening
 
@@ -8,7 +8,7 @@ They fail because they cannot trust their maintenance records.
 When maintenance data is entered manually, inconsistently, and without proper validation, organizations face a hidden governance problem:
 poor data integrity, delayed approvals, and weak accountability.
 
-That is where **GovernanceFlow** comes in.
+That is where **OPS GUARD** comes in.
 
 ## 2. Problem
 
@@ -27,7 +27,7 @@ This creates several risks:
 
 ## 3. Solution
 
-GovernanceFlow is an **AI-assisted maintenance governance platform**.
+OPS GUARD is an **AI-assisted maintenance operations platform**.
 
 It helps teams:
 - standardize maintenance input
@@ -49,7 +49,7 @@ This keeps the process simple for daily users while still supporting governance 
 
 ## 5. Why It Matters
 
-GovernanceFlow improves:
+OPS GUARD improves:
 - **data integrity** through standardized structure
 - **operational efficiency** by reducing manual review burden
 - **accountability** with visible action history
@@ -59,7 +59,7 @@ This means maintenance decisions can be made faster and with better confidence.
 
 ## 6. Product Design Philosophy
 
-We intentionally designed GovernanceFlow to be:
+We intentionally designed OPS GUARD to be:
 - simple
 - readable
 - non-intimidating
@@ -90,7 +90,7 @@ This prototype can be expanded into a production-ready platform with:
 
 ## 9. Closing
 
-GovernanceFlow turns maintenance logs into reliable governance data.
+OPS GUARD turns maintenance logs into reliable operations data.
 
 It is simple enough for daily operations,
 strong enough for management oversight,
@@ -100,8 +100,8 @@ and practical enough to evolve into a real enterprise tool.
 
 ## 30-Second Version
 
-GovernanceFlow is an AI-assisted web app that standardizes maintenance records, validates submissions, routes risky entries for review, and stores a full audit trail. It improves data integrity, reduces manual workload, and helps organizations make faster, more accountable maintenance decisions.
+OPS GUARD is an AI-assisted web app that standardizes maintenance records, validates submissions, routes risky entries for review, and stores a full audit trail. It improves data integrity, reduces manual workload, and helps organizations make faster, more accountable maintenance decisions.
 
 ## 15-Second Version
 
-GovernanceFlow helps operations teams record maintenance data in a structured, validated, and auditable way — making governance practical, not painful.
+OPS GUARD helps operations teams record maintenance data in a structured, validated, and auditable way — making operations practical, not painful.

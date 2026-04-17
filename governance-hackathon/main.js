@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'governanceflow-state-v1';
+const STORAGE_KEY = 'opsguard-state-v1';
 const BACKEND_URL = 'https://YOUR-APP.up.railway.app'; // ganti dengan URL Railway kamu
 
 const navbar = document.getElementById('navbar');
@@ -403,7 +403,7 @@ function exportRecordsToCsv() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'governanceflow-records.csv';
+  link.download = 'opsguard-records.csv';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
