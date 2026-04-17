@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'governanceflow-state-v1';
+const BACKEND_URL = 'https://YOUR-APP.up.railway.app'; // ganti dengan URL Railway kamu
 
 const navbar = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
@@ -542,7 +543,7 @@ async function analyzeWithAI() {
   setFeedback('', '');
 
   try {
-    const response = await fetch('http://localhost:8000/api/analyze', {
+    const response = await fetch(`${BACKEND_URL}/api/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
